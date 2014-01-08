@@ -1,0 +1,27 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #fafafa;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #333;
+    z-index: 1;
+}
+
+.dpad-focusable {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    max-width: 100px;
+    max-height: 100px;
+    margin: 50px;
+    z-index: 1;
+
+    background-color: grey;
+}
+
+.dpad-focusable.focused {
+    background-color: yellow;
+}

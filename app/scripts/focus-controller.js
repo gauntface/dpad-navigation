@@ -18,7 +18,10 @@
  *
  * @constructor
  */
- function FocusController() {
+function FocusController(debug) {
+    'use strict';
+
+    var debugMode = debug;
     var focusableItems = [];
     var moving = false;
     var currentlyFocusedItem = null;
@@ -30,7 +33,7 @@
     */
     this.isFocusableItem = function (item) {
         for(var i = 0; i < focusableItems.length; i++) {
-            if(focusableItems[i] == item) {
+            if(focusableItems[i] === item) {
                 return true;
             }
         }
@@ -44,6 +47,10 @@
     */
     this.pushFocusableItem = function (item) {
         focusableItems.push(item);
+        item.getElement().addEventListener('focus', function() {
+            currentlyFocusedItem = item;
+        }, false);
+        return focusableItems.length - 1;
     };
 
     /**
@@ -52,7 +59,7 @@
     */
     this.removeFocusableItem = function (item) {
         for(var i = 0; i < focusableItems.length; i++) {
-            if(focusableItems[i] == item) {
+            if(focusableItems[i] === item) {
                 focusableItems.splice(i, 1);
                 return true;
             }
@@ -97,15 +104,12 @@
     * This method performs a change of focus to the item index
     * @param {int} itemIndex
     */
-    this.handleFocusChangeToItem = function (itemIndex) {
-        if(currentlyFocusedItem) {
-            currentlyFocusedItem.setFocusState(false);
-        }
-
+    this.setCurrentFocusItem = function (itemIndex) {
         var focusableItem = this.getFocusableItem(itemIndex);
-        focusableItem.setFocusState(true);
-
         currentlyFocusedItem = focusableItem;
+        if(currentlyFocusedItem !== null) {
+            currentlyFocusedItem.getElement().focus();
+        }
     };
 
     /**
@@ -140,161 +144,33 @@
         }
 
         if(nextItemIndex !== null) {
-            this.handleFocusChangeToItem(nextItemIndex);
+            this.setCurrentFocusItem(nextItemIndex);
         }
     };
 
+    /**
+    * Determine if the focuscontroller is in a debugmode which
+    * is used to determine if debug lines should be drawn or not
+    */
+    this.isDebugMode = function() {
+        return debugMode;
+    };
+
+    /**
+    * Calculate the distance from (0,0) to (x,y)
+    */
+    this.calcDistance = function(x, y) {
+        return Math.floor(Math.sqrt((x * x) + (y * y)));
+    };
+
     // Set up binding to listen for key presses
-    document.addEventListener("keydown", function(e) {
+    document.addEventListener('keydown', function(e) {
             this.onKeyDown(e);
         }.bind(this), false);
 
-    /**
-    * @private
-    */
-    /**function calculateElementDistance(fromFocusableItem, toFocusableItem, direction) {
-
-        var fromElement = fromFocusableItem.getElement();
-        var toElement = toFocusableItem.getElement();
-
-        var fromClientWidth = fromElement.clientWidth;
-        var fromClientHeight = fromElement.clientHeight;
-        var fromElementLeft = fromElement.offsetLeft;
-        var fromElementRight = fromElementLeft + fromClientWidth;
-        var fromElementTop = fromElement.offsetTop;
-        var fromElementBottom = fromElementTop + fromElement.clientHeight;
-        var fromElementCenterX = fromElementLeft + (fromClientWidth / 2);
-        var fromElementCenterY = fromElementTop + (fromClientHeight / 2);
-
-        var toClientWidth = toElement.clientWidth;
-        var toClientHeight = toElement.clientHeight;
-        var toElementLeft = toElement.offsetLeft;
-        var toElementRight = toElementLeft + toClientWidth;
-        var toElementTop = toElement.offsetTop;
-        var toElementBottom = toElementTop + toClientHeight;
-        var toElementCenterX = toElementLeft + (toClientWidth / 2);
-        var toElementCenterY = toElementTop + (toClientHeight / 2);
-
-        var distanceY = null;
-        var distanceX = null;
-        var toItemDistance = -1;
-
-        if(direction.y === 0) {
-            if(direction.x < 0) {
-                // Move Left
-
-                // The to element is on the left hand side
-                if (toElementRight <= fromElementLeft) {
-                    distanceX = fromElementLeft - toElementRight;
-                }
-
-                // To element is to left but may overlap?
-                if (toElementCenterX <= fromElementLeft) {
-                    if (distanceX !== undefined) {
-                        distanceX = Math.min(distanceX, fromElementLeft - toElementCenterX);
-                    } else {
-                        distanceX = fromElementLeft - toElementCenterX;
-                    }
-                }
-
-                if (toElementRight <= fromElementLeft) {
-                    if (distanceX !== undefined) {
-                        distanceX = Math.min(distanceX, fromElementLeft - toElementRight);
-                    } else {
-                        distanceX = fromElementLeft - toElementRight;
-                    }
-                }
-            } else if(direction.x > 0) {
-                // Move Right
-                if (fromElementRight <= toElementLeft) {
-                    distanceX = toElementLeft - fromElementRight;
-                }
-
-                if (fromElementRight <= toElementCenterX) {
-                    if (distanceX !== undefined) {
-                        distanceX = Math.min(distanceX, toElementCenterX - fromElementRight);
-                    } else {
-                        distanceX = toElementCenterX - fromElementRight;
-                    }
-                }
-
-                if (fromElementLeft < toElementLeft) {
-                    if (distanceX !== undefined) {
-                        distanceX = Math.min(distanceX, toElementLeft - fromElementLeft);
-                    } else {
-                        distanceX = toElementLeft - fromElementLeft;
-                    }
-                }
-            }
-
-            distanceY = Math.min(Math.abs(fromElementCenterY - toElementTop),
-               Math.abs(fromElementCenterY - toElementCenterY),
-               Math.abs(fromElementCenterY - toElementBottom)) * 2;
-        } else if(direction.x === 0) {
-            if(direction.y > 0) {
-                // Move Up
-                if (toElementBottom <= fromElementTop) {
-                    distanceY = fromElementTop - toElementBottom;
-                }
-
-                if (toElementCenterY <= fromElementTop) {
-                    if (distanceY !== undefined) {
-                        distanceY = Math.min(distanceY, fromElementTop - toElementCenterY);
-                    } else {
-                        distanceY = fromElementTop - toElementCenterY;
-                    }
-                }
-
-                if (toElementBottom <= fromElementTop) {
-                    if (distanceY !== undefined) {
-                        distanceY = Math.min(distanceY, fromElementTop - toElementBottom);
-                    } else {
-                        distanceY = fromElementTop - toElementBottom;
-                    }
-                }
-            } else if(direction.y < 0) {
-                // Move Down
-
-                // Handle when the view is above the current view
-                if (fromElementBottom <= toElementTop) {
-                    distanceY = toElementTop - fromElementBottom;
-                }
-
-                // If the item overlaps the currebt
-                if (fromElementBottom <= toElementCenterY) {
-                    if (distanceY !== undefined) {
-                        distanceY = Math.min(distanceY, toElementCenterY - fromElementBottom);
-                    } else {
-                        distanceY = toElementCenterY - fromElementBottom;
-                    }
-                }
-
-                if (fromElementTop < toElementTop) {
-                    if (distanceY !== undefined) {
-                        distanceY = Math.min(distanceY, toElementTop - fromElementTop);
-                    } else {
-                        distanceY = toElementTop - fromElementTop;
-                    }
-                }
-            }
-
-            distanceX = Math.min(Math.abs(fromElementCenterX - toElementLeft),
-               Math.abs(fromElementCenterX - toElementCenterX),
-               Math.abs(fromElementCenterX - toElementRight)) * 2;
-        }
-
-        // If either distance is undefined, the toItem is in the wrong direction,
-        // so forget trying to move to it.
-        if (distanceX !== null && distanceY !== null) {
-            toItemDistance = this.calcDistance(distanceX, distanceY);
-        }
-
-        return toItemDistance;
-    }**/
-
-    this.calcDistance = function(x, y) {
-        return Math.floor(Math.sqrt((x * x) + (y * y)));
-    }
+    document.addEventListener('keyup', function(e) {
+            this.onKeyUp(e);
+        }.bind(this), false);
 }
 
 /**
@@ -304,31 +180,49 @@
 * FocusController
 */
 FocusController.prototype.addFocusableItem = function (item) {
+    'use strict';
+
     if(this.isFocusableItem(item)) {
         return;
     }
 
-    var itemIndex = this.getFocusableItemCount();
     this.pushFocusableItem(item);
-
-    // This is essentially the dom element of the focusable item
-    var element = item.getElement();
-    
-    // TODO: Need to handle passing in itemIndex
-    element.addEventListener('click', function(e) {
-        if(this.isMoving()) {
-            return;
-        }
-
-        //var itemIndex = event.data.itemIndex;
-        if(this.getCurrentlyFocusedItem()) {
-            this.getCurrentlyFocusedItem().onItemClick();
-        }
-    }.bind(this), false);
 };
 
+/**
+ * Iterate over the children and set their neighbours up
+ * correctly.
+ * @function
+ **/
 FocusController.prototype.updateFocusGraph = function() {
+    'use strict';
     var itemCount = this.getFocusableItemCount();
+    
+    for(var i = 0; i < itemCount; i++) {
+        var focusableItem = this.getFocusableItem(i);
+        // If the element can't be focused, skip it.
+        if(!this.isFocusable(focusableItem.getElement())) {
+            continue;
+        }
+
+        this.updateNodeEdges(i);
+
+        if(this.isDebugMode()) {
+            this.printDebugLinesForNode(i, focusableItem);
+        }
+    }
+};
+
+/**
+ * For a given element, print it's left, right, up and down neighbours
+ * The index is used to select a color for the line.
+ * @function
+ * @param {int} Index of the element to draw neighbours
+ * @param {FocusableItem}  Item to draw neighbours for
+ **/
+FocusController.prototype.printDebugLinesForNode = function(index, focusableItem) {
+    'use strict';
+
     var markerColors = [
         '#1abc9c',
         '#2ecc71',
@@ -341,104 +235,106 @@ FocusController.prototype.updateFocusGraph = function() {
         '#ecf0f1',
         '#95a5a6'
     ];
-    for(var i = 0; i < itemCount; i++) {
-        var focusableItem = this.getFocusableItem(i);
-        this.updateNodeEdges(i);
+    var markerIndex = index % markerColors.length;
+    var markerColor = markerColors[markerIndex];
 
-        var markerIndex = i % markerColors.length;
-        var markerColor = markerColors[markerIndex];
+    var currentItemMetrics = this.getItemMetrics(focusableItem.getElement());
 
-        var currentItemMetrics = this.getItemMetrics(focusableItem.getElement());
+    var newItemMetrics, xDist, yDist, angle;
 
-        if(focusableItem.getTopFocusItemIndex() !== null) {
-            var newItemMetrics = this.getItemMetrics(this.getFocusableItem(focusableItem.getTopFocusItemIndex()).getElement());
-            var xDist = newItemMetrics.center.x - currentItemMetrics.center.x;
-            var yDist = currentItemMetrics.top - newItemMetrics.center.y;
+    if(focusableItem.getTopFocusItemIndex() !== null) {
+        newItemMetrics = this.getItemMetrics(this.getFocusableItem(focusableItem.getTopFocusItemIndex()).getElement());
+        xDist = newItemMetrics.center.x - currentItemMetrics.center.x;
+        yDist = currentItemMetrics.top - newItemMetrics.center.y;
 
-            var angle = ((Math.atan2(xDist, yDist) * 180) / Math.PI) + 180;
+        angle = ((Math.atan2(xDist, yDist) * 180) / Math.PI) + 180;
 
-            this.printDebugLine(this.calcDistance(xDist, yDist), (currentItemMetrics.center.x-5), currentItemMetrics.top, markerColor, angle);
-        }
-
-        if(focusableItem.getBottomFocusItemIndex() !== null) {
-            var newItemMetrics = this.getItemMetrics(this.getFocusableItem(focusableItem.getBottomFocusItemIndex()).getElement());
-            var xDist = currentItemMetrics.center.x - newItemMetrics.center.x;
-            var yDist = newItemMetrics.center.y - currentItemMetrics.bottom;
-
-            var angle = ((Math.atan2(xDist, yDist) * 180) / Math.PI) + 360;
-
-            this.printDebugLine(this.calcDistance(xDist, yDist), (currentItemMetrics.center.x+5), currentItemMetrics.bottom, markerColor, angle);
-        }
-
-        if(focusableItem.getLeftFocusItemIndex() !== null) {
-            var newItemMetrics = this.getItemMetrics(this.getFocusableItem(focusableItem.getLeftFocusItemIndex()).getElement());
-            var xDist = newItemMetrics.center.x - currentItemMetrics.left;
-            var yDist = newItemMetrics.center.y - currentItemMetrics.center.y;
-
-            var angle = ((Math.atan2(xDist, yDist) * 180) / Math.PI) + 180;
-
-            this.printDebugLine(this.calcDistance(xDist, yDist), currentItemMetrics.left, currentItemMetrics.center.y + 5, markerColor, angle);
-        }
-
-        if(focusableItem.getRightFocusItemIndex() !== null) {
-            var newItemMetrics = this.getItemMetrics(this.getFocusableItem(focusableItem.getRightFocusItemIndex()).getElement());
-            var xDist = newItemMetrics.center.x - currentItemMetrics.right;
-            var yDist = currentItemMetrics.center.y - newItemMetrics.center.y;
-
-            var angle = ((Math.atan2(xDist, yDist) * 180) / Math.PI) + 180;
-
-            this.printDebugLine(this.calcDistance(xDist, yDist), currentItemMetrics.right, currentItemMetrics.center.y - 5, markerColor, angle);
-        }
+        this.printDebugLine(this.calcDistance(xDist, yDist), (currentItemMetrics.center.x-5), currentItemMetrics.top, markerColor, angle);
     }
-}
 
-FocusController.prototype.printDebugLine = function(height, startX, startY, color, angle) {
+    if(focusableItem.getBottomFocusItemIndex() !== null) {
+        newItemMetrics = this.getItemMetrics(this.getFocusableItem(focusableItem.getBottomFocusItemIndex()).getElement());
+        xDist = currentItemMetrics.center.x - newItemMetrics.center.x;
+        yDist = newItemMetrics.center.y - currentItemMetrics.bottom;
+
+        angle = ((Math.atan2(xDist, yDist) * 180) / Math.PI) + 360;
+
+        this.printDebugLine(this.calcDistance(xDist, yDist), (currentItemMetrics.center.x+5), currentItemMetrics.bottom, markerColor, angle);
+    }
+
+    if(focusableItem.getLeftFocusItemIndex() !== null) {
+        newItemMetrics = this.getItemMetrics(this.getFocusableItem(focusableItem.getLeftFocusItemIndex()).getElement());
+        xDist = newItemMetrics.center.x - currentItemMetrics.left;
+        yDist = currentItemMetrics.center.y - newItemMetrics.center.y;
+
+        angle = ((Math.atan2(xDist, yDist) * 180) / Math.PI) + 180;
+
+        this.printDebugLine(this.calcDistance(xDist, yDist), currentItemMetrics.left, currentItemMetrics.center.y + 5, markerColor, angle);
+    }
+
+    if(focusableItem.getRightFocusItemIndex() !== null) {
+        newItemMetrics = this.getItemMetrics(this.getFocusableItem(focusableItem.getRightFocusItemIndex()).getElement());
+        xDist = newItemMetrics.center.x - currentItemMetrics.right;
+        yDist = currentItemMetrics.center.y - newItemMetrics.center.y;
+
+        angle = ((Math.atan2(xDist, yDist) * 180) / Math.PI) + 180;
+
+        this.printDebugLine(this.calcDistance(xDist, yDist), currentItemMetrics.right, currentItemMetrics.center.y - 5, markerColor, angle);
+    }
+};
+
+/**
+ * Prints a single line for the given parameters
+ * @function
+ * @param {int} Length of line
+ * @param {int} X Coordinate for starting the line
+ * @param {int} Y Coordinate for starting the line
+ * @param {Color} Color to draw the line
+ * @param {int} Angle for the line to rotate around (in degrees)
+ **/
+FocusController.prototype.printDebugLine = function(length, startX, startY, color, angle) {
+    'use strict';
+
     var dotElement = document.createElement('div');
-    var dotWidth = 20;
     dotElement.classList.add('marker');
     dotElement.classList.add('start');
     dotElement.style.position = 'absolute';
     dotElement.style.width = 5+'px';
-    dotElement.style.height = height+'px';
+    dotElement.style.height = length+'px';
     dotElement.style.left = startX+'px';
     dotElement.style.top = startY+'px';
     dotElement.style.backgroundColor = color;
     dotElement.style['-webkit-transform'] = 'rotate('+angle+'deg)';
     dotElement.style['-webkit-transform-origin'] = '0% 0%';
     document.body.appendChild(dotElement);
-}
+};
 
+/**
+ * Given an index, the focusable element at that index will
+ * be given it's closest neighbours to traverse on left, right
+ * up and down.
+ * @function
+ * @param {int} Index of element to update neighbours for
+ **/
 FocusController.prototype.updateNodeEdges = function(currentIndex) {
+    'use strict';
+
     var currentItem = this.getFocusableItem(currentIndex);
     var currentItemMetrics = this.getItemMetrics(currentItem.getElement());
 
     var itemCount = this.getFocusableItemCount();
-    
-    var markerColors = [
-        '#1abc9c',
-        '#2ecc71',
-        '#3498db',
-        '#9b59b6',
-        '#34495e',
-        '#f1c40f',
-        '#e67e22',
-        '#e74c3c',
-        '#ecf0f1',
-        '#95a5a6'
-    ];
 
     var topElementDist;
     var bottomElementDist;
     var leftElementDist;
     var rightElementDist;
     for(var i = 0; i < itemCount; i++) {
-        newItem = this.getFocusableItem(i);
-        if(newItem == currentItem) {
+        var newItem = this.getFocusableItem(i);
+        // If the element can't be focused, or is the current element,
+        // skip it.
+        if(!this.isFocusable(newItem.getElement()) || newItem === currentItem) {
             continue;
         }
-
-        var markerIndex = currentIndex % markerColors.length;
-        var markerColor = markerColors[markerIndex];
 
         var newItemMetrics = this.getItemMetrics(newItem.getElement());
         var distanceTop = this.getTopDistance(currentItemMetrics, newItemMetrics);
@@ -470,9 +366,32 @@ FocusController.prototype.updateNodeEdges = function(currentIndex) {
             currentItem.setRightFocusItemIndex(i);
         }
     }
-}
+};
 
+FocusController.prototype.isFocusable = function(element) {
+    'use strict';
+
+    if(element.style.display === 'none' || element.style.visibility === 'hidden') {
+        return false;
+    }
+
+    var tabIndex = element.getAttribute('tabindex');
+    console.log('tabIndex = ', tabIndex);
+    tabIndex = (tabIndex === null) ? -1 : tabIndex;
+    return tabIndex > -1;
+};
+
+/**
+ * Find the distance from the current elements (fromMetrics),
+ * to the (toMetrics) element, if the element is in the up
+ * direction.
+ * @function
+ * @param {Metrics} Starting elements metrics
+ * @param {Metrics} Finishing elements metrics
+ **/
 FocusController.prototype.getTopDistance = function(fromMetrics, toMetrics) {
+    'use strict';
+
     // Move Up
     var distance = {x: null, y: null};
     
@@ -489,9 +408,19 @@ FocusController.prototype.getTopDistance = function(fromMetrics, toMetrics) {
     }
 
     return this.calcDistance(distance.x, distance.y);
-}
+};
 
+/**
+ * Find the distance from the current elements (fromMetrics),
+ * to the (toMetrics) element, if the element is in the down
+ * direction.
+ * @function
+ * @param {Metrics} Starting elements metrics
+ * @param {Metrics} Finishing elements metrics
+ **/
 FocusController.prototype.getBottomDistance = function(fromMetrics, toMetrics) {
+    'use strict';
+
     // Move Down
     var distance = {x: null, y: null};
     if (fromMetrics.center.y < toMetrics.center.y) {
@@ -507,9 +436,19 @@ FocusController.prototype.getBottomDistance = function(fromMetrics, toMetrics) {
     }
 
     return this.calcDistance(distance.x, distance.y);
-}
+};
 
+/**
+ * Find the distance from the current elements (fromMetrics),
+ * to the (toMetrics) element, if the element is in the left
+ * direction.
+ * @function
+ * @param {Metrics} Starting elements metrics
+ * @param {Metrics} Finishing elements metrics
+ **/
 FocusController.prototype.getLeftDistance = function(fromMetrics, toMetrics) {
+    'use strict';
+
     // Move Left
     var distance = {x: null, y: null};
     if (toMetrics.center.x < fromMetrics.center.x) {
@@ -527,9 +466,19 @@ FocusController.prototype.getLeftDistance = function(fromMetrics, toMetrics) {
     }
 
     return this.calcDistance(distance.x, distance.y);
-}
+};
 
+/**
+ * Find the distance from the current elements (fromMetrics),
+ * to the (toMetrics) element, if the element is in the right
+ * direction.
+ * @function
+ * @param {Metrics} Starting elements metrics
+ * @param {Metrics} Finishing elements metrics
+ **/
 FocusController.prototype.getRightDistance = function(fromMetrics, toMetrics) {
+    'use strict';
+
     // Move Right
     var distance = {x: null, y: null};
 
@@ -546,9 +495,17 @@ FocusController.prototype.getRightDistance = function(fromMetrics, toMetrics) {
     }
 
     return this.calcDistance(distance.x, distance.y);
-}
+};
 
+/**
+ * Get the size and distance of the element relative 
+ * to the viewport
+ * @function
+ * @param {DomElement} Element to get full metrics
+ **/
 FocusController.prototype.getItemMetrics = function(item) {
+    'use strict';
+
     var clientRect = item.getBoundingClientRect();
     var metrics = {
         width: clientRect.width,
@@ -564,7 +521,7 @@ FocusController.prototype.getItemMetrics = function(item) {
     };
 
     return metrics;
-}
+};
 
 /**
 * On a key press this method will handle moving the focus
@@ -572,30 +529,56 @@ FocusController.prototype.getItemMetrics = function(item) {
 * @param {int} event Browser key code
 */
 FocusController.prototype.onKeyDown = function (event) {
+    'use strict';
+
     switch(event.keyCode) {
         case 9:
             // Tab
             break;
         case 37:
             // Left
+            event.preventDefault();
             this.moveFocus({x: -1, y: 0});
             break;
         case 38:
             // Up
+            event.preventDefault();
             this.moveFocus({x: 0, y: 1});
             break;
         case 39:
             // Right
+            event.preventDefault();
             this.moveFocus({x: 1, y: 0});
             break;
         case 40:
             // Down
+            event.preventDefault();
             this.moveFocus({x: 0, y: -1});
             break;
         case 13:
             // Enter
+            event.preventDefault();
             if(this.getCurrentlyFocusedItem()) {
-                this.getCurrentlyFocusedItem().onItemClick();
+                this.getCurrentlyFocusedItem().onItemClickStateChange(true);
+            }
+            break;
+    }
+};
+
+/**
+* On a key press this method will handle moving the focus
+* @function
+* @param {int} event Browser key code
+*/
+FocusController.prototype.onKeyUp = function (event) {
+    'use strict';
+
+    switch(event.keyCode) {
+        case 13:
+            // Enter
+            event.preventDefault();
+            if(this.getCurrentlyFocusedItem()) {
+                this.getCurrentlyFocusedItem().onItemClickStateChange(false);
             }
             break;
     }

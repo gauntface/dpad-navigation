@@ -20,7 +20,9 @@
  * @param {DOMElement} domElement The dom element to assosciate with this
  * focusable item
  */
- function FocusableItem(domElement) {
+function FocusableItem(domElement) {
+    'use strict';
+
     var element = domElement;
     var focusState = false;
 
@@ -49,7 +51,7 @@
             left: null,
             right: null
         };
-    }
+    };
 
     this.setTopFocusItemIndex = function(index) {
         focusableItems.top = index;
@@ -87,18 +89,10 @@
 }
 
 /**
-* This is a callback method when the focus state has changed
-* @function
-* @param {Boolean} isFocused
-*/
-FocusableItem.prototype.onFocusStateChange = function (isFocused) {
-    // NOOP
-};
-
-/**
 * Callback for when the item is clicked
 * @function
 */
-FocusableItem.prototype.onItemClick = function FocusableItem_onItemClick() {
+FocusableItem.prototype.onItemClickStateChange = function (isDown) {
+    /* jshint unused: false */
     // NOOP
 };

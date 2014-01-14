@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-GenericFocusableItem.prototype = new FocusableItem();
+/* jshint undef: false */
 
 /**
  * This is a Focusable Grid Item. It handles the focusing and defocusing of
@@ -24,10 +24,12 @@ GenericFocusableItem.prototype = new FocusableItem();
  * @param {String} containerId Container ID of the Focusable item
  */
 function GenericFocusableItem(element, contId) {
+    'use strict';
+
     FocusableItem.call(this, element);
 
     var classStates = {
-        focused: "focused"
+        clickDown: 'clickdown'
     };
     var itemClickCallback = null;
     var containerId = contId;
@@ -62,42 +64,22 @@ function GenericFocusableItem(element, contId) {
     };
 }
 
-/**
-* Callback when the objects focus state changes
-* @param {Boolean} isFocused
-*/
-GenericFocusableItem.prototype.onFocusStateChange = function(isFocused) {
-    var element = this.getElement();
-    if(isFocused) {
-        element.classList.add(this.getClassStates().focused);
-
-        // Scroll into view
-        /**var itemRootParent = $("#"+this.getContainerId());
-        var elementWrapper = element.parent();
-
-        var offsetAmount = elementWrapper.position().top +
-        elementWrapper.outerHeight(true) -
-        itemRootParent.outerHeight(true);
-
-        if(offsetAmount > 0) {
-            itemRootParent.stop().animate({
-                scrollTop: itemRootParent.scrollTop() + offsetAmount
-            }, 500);
-        } else if(elementWrapper.position().top < 0) {
-            itemRootParent.stop().animate({
-                scrollTop: itemRootParent.scrollTop() + elementWrapper.position().top
-            }, 500);
-        }**/
-    } else {
-        element.classList.remove(this.getClassStates().focused);
-    }
-};
+GenericFocusableItem.prototype = new FocusableItem();
 
 /**
 * Callback when the object is clicked
 */
-GenericFocusableItem.prototype.onItemClick = function() {
-    if(this.getOnItemClickCallback()) {
-        this.getOnItemClickCallback()();
+GenericFocusableItem.prototype.onItemClickStateChange = function(isDown) {
+    'use strict';
+
+    var element = this.getElement();
+    if(isDown) {
+        element.classList.add(this.getClassStates().clickDown);
+    } else {
+        element.classList.remove(this.getClassStates().clickDown);
+
+        var evObj = document.createEvent('MouseEvents');
+        evObj.initEvent('click', true, true);
+        element.dispatchEvent(evObj);
     }
 };

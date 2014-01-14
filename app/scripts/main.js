@@ -1,8 +1,5 @@
-/* jshint undef: false */
-window.addEventListener('load', function() {
-	'use strict';
-
-	window.dpadFocusController = new FocusController(false);
+function resetFocusController() {
+	window.dpadFocusController.removeAllFocusableItems();
 
 	var focusableItems = document.querySelectorAll('.dpad-focusable');
 
@@ -17,6 +14,15 @@ window.addEventListener('load', function() {
 	if(focusableItems.length > 0) {
 		window.dpadFocusController.setCurrentFocusItem(0);
 	}
+}
+
+/* jshint undef: false */
+window.addEventListener('load', function() {
+	'use strict';
+
+	window.dpadFocusController = new FocusController();
+	window.dpadFocusController.reset = resetFocusController;
+	window.dpadFocusController.reset();
 }, true);
 
 window.addEventListener('resize', function() {

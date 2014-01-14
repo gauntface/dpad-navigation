@@ -2,7 +2,7 @@ function setFocusEvent(element) {
 	'use strict';
 
 	element.addEventListener('focus', function(e) {
-		e.target.scrollIntoView(false);
+		console.log('Element Focused');
 	}, true);
 
 	element.addEventListener('click', function() {

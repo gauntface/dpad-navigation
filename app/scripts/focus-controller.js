@@ -18,10 +18,10 @@
  *
  * @constructor
  */
-function FocusController(debug) {
+function FocusController() {
     'use strict';
 
-    var debugMode = debug;
+    var debugMode = false;
     var focusableItems = [];
     var moving = false;
     var currentlyFocusedItem = null;
@@ -164,6 +164,11 @@ function FocusController(debug) {
         return debugMode;
     };
 
+    this.toggleDebugMode = function() {
+        debugMode = !debugMode;
+        this.updateFocusGraph();
+    };
+
     /**
     * Calculate the distance from (0,0) to (x,y)
     */
@@ -204,6 +209,8 @@ FocusController.prototype.addFocusableItem = function (item) {
  **/
 FocusController.prototype.updateFocusGraph = function() {
     'use strict';
+    this.clearDebugLines();
+
     var itemCount = this.getFocusableItemCount();
     
     for(var i = 0; i < itemCount; i++) {
@@ -218,6 +225,13 @@ FocusController.prototype.updateFocusGraph = function() {
         if(this.isDebugMode()) {
             this.printDebugLinesForNode(i, focusableItem);
         }
+    }
+};
+
+FocusController.prototype.clearDebugLines = function() {
+    var debugLines = document.querySelectorAll('.dpad-debug-line');
+    for(var i = 0; i < debugLines.length; i++) {
+        debugLines[i].remove();
     }
 };
 
@@ -303,18 +317,19 @@ FocusController.prototype.printDebugLinesForNode = function(index, focusableItem
 FocusController.prototype.printDebugLine = function(length, startX, startY, color, angle) {
     'use strict';
 
-    var dotElement = document.createElement('div');
-    dotElement.classList.add('marker');
-    dotElement.classList.add('start');
-    dotElement.style.position = 'absolute';
-    dotElement.style.width = 5+'px';
-    dotElement.style.height = length+'px';
-    dotElement.style.left = startX+'px';
-    dotElement.style.top = startY+'px';
-    dotElement.style.backgroundColor = color;
-    dotElement.style['-webkit-transform'] = 'rotate('+angle+'deg)';
-    dotElement.style['-webkit-transform-origin'] = '0% 0%';
-    document.body.appendChild(dotElement);
+    var lineElement = document.createElement('div');
+    lineElement.classList.add('dpad-debug-line');
+    lineElement.classList.add('marker');
+    lineElement.classList.add('start');
+    lineElement.style.position = 'absolute';
+    lineElement.style.width = 5+'px';
+    lineElement.style.height = length+'px';
+    lineElement.style.left = startX+'px';
+    lineElement.style.top = startY+'px';
+    lineElement.style.backgroundColor = color;
+    lineElement.style['-webkit-transform'] = 'rotate('+angle+'deg)';
+    lineElement.style['-webkit-transform-origin'] = '0% 0%';
+    document.body.appendChild(lineElement);
 };
 
 /**

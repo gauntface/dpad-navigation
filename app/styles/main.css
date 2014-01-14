@@ -22,6 +22,6 @@ body {
     background-color: grey;
 }
 
-.dpad-focusable.focused {
+.dpad-focusable:focus {
     background-color: yellow;
 }

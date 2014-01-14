@@ -44,7 +44,7 @@ body {
     }
 }
 
-.grid-item.focused, .grid-item:focus {
+.grid-item:focus {
     outline: none;
     background-color: rgb(149, 165, 166);
 }

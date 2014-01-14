@@ -68,6 +68,14 @@ function FocusController(debug) {
     };
 
     /**
+     * Remove all of the items in the focusableItems
+     * array
+     */
+    this.removeAllFocusableItems = function() {
+        focusableItems = [];
+    };
+
+    /**
     * Get the number of focusable items in the controller
     */
     this.getFocusableItemCount = function () {
@@ -376,7 +384,6 @@ FocusController.prototype.isFocusable = function(element) {
     }
 
     var tabIndex = element.getAttribute('tabindex');
-    console.log('tabIndex = ', tabIndex);
     tabIndex = (tabIndex === null) ? -1 : tabIndex;
     return tabIndex > -1;
 };

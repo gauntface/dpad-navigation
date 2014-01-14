@@ -2,10 +2,6 @@ function setFocusEvent(element) {
 	'use strict';
 
 	element.addEventListener('focus', function(e) {
-		if(!e.detail.isFocused) {
-			return;
-		}
-
 		e.target.scrollIntoView(false);
 	}, true);
 

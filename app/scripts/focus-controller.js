@@ -351,6 +351,7 @@ FocusController.prototype.updateNodeEdges = function(currentIndex) {
     var bottomElementDist;
     var leftElementDist;
     var rightElementDist;
+
     for(var i = 0; i < itemCount; i++) {
         var newItem = this.getFocusableItem(i);
         // If the element can't be focused, or is the current element,
@@ -417,8 +418,8 @@ FocusController.prototype.getTopDistance = function(fromMetrics, toMetrics) {
     // Move Up
     var distance = {x: null, y: null};
     
-    if (toMetrics.center.y < fromMetrics.center.y) {
-        distance.y = fromMetrics.top - toMetrics.center.y;
+    if (toMetrics.top < fromMetrics.top) {
+        distance.y = fromMetrics.top - toMetrics.top;
     }
 
     distance.x = Math.min(Math.abs(fromMetrics.center.x - toMetrics.left),
@@ -426,6 +427,12 @@ FocusController.prototype.getTopDistance = function(fromMetrics, toMetrics) {
                Math.abs(fromMetrics.center.x - toMetrics.right)) * 2;
 
     if(distance.x === null || distance.y === null) {
+        return null;
+    }
+
+    var angle = Math.atan(distance.y / distance.x) * (180/Math.PI);
+    // If the angle is too shallow it's not really up
+    if(!(Math.abs(angle) > 20)) {
         return null;
     }
 
@@ -445,8 +452,8 @@ FocusController.prototype.getBottomDistance = function(fromMetrics, toMetrics) {
 
     // Move Down
     var distance = {x: null, y: null};
-    if (fromMetrics.center.y < toMetrics.center.y) {
-        distance.y = toMetrics.center.y - fromMetrics.center.y;
+    if (fromMetrics.bottom < toMetrics.bottom) {
+        distance.y = toMetrics.bottom - fromMetrics.bottom;
     }
 
     distance.x = Math.min(Math.abs(fromMetrics.center.x - toMetrics.left),
@@ -454,6 +461,12 @@ FocusController.prototype.getBottomDistance = function(fromMetrics, toMetrics) {
                Math.abs(fromMetrics.center.x - toMetrics.right)) * 2;
     
     if(distance.x === null || distance.y === null) {
+        return null;
+    }
+
+    var angle = Math.atan(distance.y / distance.x) * (180/Math.PI);
+    // If the angle is too shallow it's not really up
+    if(!(Math.abs(angle) > 20)) {
         return null;
     }
 
@@ -473,8 +486,8 @@ FocusController.prototype.getLeftDistance = function(fromMetrics, toMetrics) {
 
     // Move Left
     var distance = {x: null, y: null};
-    if (toMetrics.center.x < fromMetrics.center.x) {
-        distance.x = fromMetrics.center.x - toMetrics.center.x;
+    if (toMetrics.left < fromMetrics.left) {
+        distance.x = fromMetrics.left - toMetrics.left;
     }
 
     distance.y = Math.min(
@@ -484,6 +497,12 @@ FocusController.prototype.getLeftDistance = function(fromMetrics, toMetrics) {
                 ) * 2;
 
     if(distance.x === null || distance.y === null) {
+        return null;
+    }
+
+    var angle = Math.atan(distance.x / distance.y) * (180/Math.PI);
+    // If the angle is too shallow it's not really up
+    if(!(Math.abs(angle) > 20)) {
         return null;
     }
 
@@ -504,8 +523,8 @@ FocusController.prototype.getRightDistance = function(fromMetrics, toMetrics) {
     // Move Right
     var distance = {x: null, y: null};
 
-    if (fromMetrics.center.x < toMetrics.center.x) {
-        distance.x = toMetrics.center.x - fromMetrics.center.x;
+    if (fromMetrics.right < toMetrics.right) {
+        distance.x = toMetrics.right - fromMetrics.right;
     }
 
     distance.y = Math.min(Math.abs(fromMetrics.center.y - toMetrics.top),
@@ -513,6 +532,12 @@ FocusController.prototype.getRightDistance = function(fromMetrics, toMetrics) {
                Math.abs(fromMetrics.center.y - toMetrics.bottom)) * 2;
 
     if(distance.x === null || distance.y === null) {
+        return null;
+    }
+
+    var angle = Math.atan(distance.x / distance.y) * (180/Math.PI);
+    // If the angle is too shallow it's not really up
+    if(!(Math.abs(angle) > 20)) {
         return null;
     }
 

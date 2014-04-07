@@ -24,8 +24,6 @@ function resetFocusController() {
 
 	window.dpadFocusController.updateFocusGraph();
 
-	console.log('Found '+focusableItems.length+' focusable items');
-
 	if(focusableItems.length > 0) {
 		window.dpadFocusController.setCurrentFocusItem(0);
 	}
@@ -38,8 +36,6 @@ window.addEventListener('load', function() {
 	window.dpadFocusController = new FocusController();
 	window.dpadFocusController.reset = resetFocusController;
 	window.dpadFocusController.reset();
-
-	window.dpadFocusController.toggleDebugMode();
 }, true);
 
 window.addEventListener('resize', function() {

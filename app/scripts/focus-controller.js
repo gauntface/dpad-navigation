@@ -347,10 +347,10 @@ FocusController.prototype.updateNodeEdges = function(currentIndex) {
 
     var itemCount = this.getFocusableItemCount();
 
-    var topElementDist;
-    var bottomElementDist;
-    var leftElementDist;
-    var rightElementDist;
+    var minTopElementDist;
+    var minBottomElementDist;
+    var minLeftElementDist;
+    var minRightElementDist;
 
     for(var i = 0; i < itemCount; i++) {
         var newItem = this.getFocusableItem(i);
@@ -366,26 +366,26 @@ FocusController.prototype.updateNodeEdges = function(currentIndex) {
         var distanceLeft = this.getLeftDistance(currentItemMetrics, newItemMetrics);
         var distanceRight = this.getRightDistance(currentItemMetrics, newItemMetrics);
 
-        if(distanceTop !== null && (typeof topElementDist === 'undefined' || topElementDist > distanceTop)) {
-            topElementDist = distanceTop;
+        if(distanceTop !== null && (typeof minTopElementDist === 'undefined' || minTopElementDist > distanceTop)) {
+            minTopElementDist = distanceTop;
 
             currentItem.setTopFocusItemIndex(i);
         }
 
-        if(distanceBottom !== null && (typeof bottomElementDist === 'undefined' || bottomElementDist > distanceBottom)) {
-            bottomElementDist = distanceBottom;
+        if(distanceBottom !== null && (typeof minBottomElementDist === 'undefined' || minBottomElementDist > distanceBottom)) {
+            minBottomElementDist = distanceBottom;
 
             currentItem.setBottomFocusItemIndex(i);
         }
 
-        if(distanceLeft !== null && (typeof leftElementDist === 'undefined' || leftElementDist > distanceLeft)) {
-            leftElementDist = distanceLeft;
+        if(distanceLeft !== null && (typeof minLeftElementDist === 'undefined' || minLeftElementDist > distanceLeft)) {
+            minLeftElementDist = distanceLeft;
 
             currentItem.setLeftFocusItemIndex(i);
         }
 
-        if(distanceRight !== null && (typeof rightElementDist === 'undefined' || rightElementDist > distanceRight)) {
-            rightElementDist = distanceRight;
+        if(distanceRight !== null && (typeof minRightElementDist === 'undefined' || minRightElementDist > distanceRight)) {
+            minRightElementDist = distanceRight;
 
             currentItem.setRightFocusItemIndex(i);
         }
@@ -418,6 +418,7 @@ FocusController.prototype.getTopDistance = function(fromMetrics, toMetrics) {
     // Move Up
     var distance = {x: null, y: null};
     
+
     if (toMetrics.top < fromMetrics.top) {
         distance.y = fromMetrics.top - toMetrics.top;
     }
@@ -452,14 +453,20 @@ FocusController.prototype.getBottomDistance = function(fromMetrics, toMetrics) {
 
     // Move Down
     var distance = {x: null, y: null};
+    var directlyBelow = false;
+
     if (fromMetrics.bottom < toMetrics.bottom) {
         distance.y = toMetrics.bottom - fromMetrics.bottom;
     }
 
-    distance.x = Math.min(Math.abs(fromMetrics.center.x - toMetrics.left),
-               Math.abs(fromMetrics.center.x - toMetrics.center.x),
-               Math.abs(fromMetrics.center.x - toMetrics.right)) * 2;
-    
+    if(toMetrics.left <= fromMetrics.center.x && toMetrics.right >= fromMetrics.center.x) {
+        return distance.y;
+    } else {
+        distance.x = Math.min(Math.abs(fromMetrics.center.x - toMetrics.left),
+                   Math.abs(fromMetrics.center.x - toMetrics.center.x),
+                   Math.abs(fromMetrics.center.x - toMetrics.right)) * 2;
+    }
+
     if(distance.x === null || distance.y === null) {
         return null;
     }
@@ -558,9 +565,9 @@ FocusController.prototype.getItemMetrics = function(item) {
         width: clientRect.width,
         height: clientRect.height,
         left: clientRect.left,
-        right: item.offsetLeft + clientRect.width,
+        right: clientRect.left + clientRect.width,
         top: clientRect.top,
-        bottom: item.offsetTop + clientRect.height,
+        bottom: clientRect.top + clientRect.height,
         center: {
             x: clientRect.left + (clientRect.width / 2),
             y: clientRect.top + (clientRect.height / 2)

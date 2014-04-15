@@ -283,7 +283,15 @@ module.exports = function (grunt) {
                 'svgmin',
                 'htmlmin'
             ]
-        }
+        },
+        dalek: {
+            options: {
+                browser: ['phantomjs'], //, 'chrome', 'chrome:canary'],
+            },
+            dist: {
+                src: ['test/dalek/*.js']
+            }
+       }
     });
 
     grunt.registerTask('serve', function (target) {
@@ -310,7 +318,8 @@ module.exports = function (grunt) {
         'concurrent:test',
         'autoprefixer',
         'connect:test',
-        'mocha'
+        'mocha',
+        'dalek:dist',
     ]);
 
     grunt.registerTask('build', [
@@ -323,7 +332,8 @@ module.exports = function (grunt) {
         'uglify',
         'copy:dist',
         //'rev',
-        'usemin'
+        'usemin',
+        'dalek:dist',
     ]);
 
     grunt.registerTask('default', [

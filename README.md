@@ -10,7 +10,7 @@ Usage
 
 To support D-Pad navigation with this library, you need to do the following:
 
-  - Download the library’s javascript file from here: https://raw.github.com/gauntface/dpad-navigation/master/build/dpad-nav-lib.min.js
+  - Download the library’s javascript file from here: https://raw.githubusercontent.com/gauntface/dpad-navigation/master/build/dpad-nav-lib-0.0.4.min.js
   - Import the javascript file into your page:
 ```html
 <script src="./scripts/dpad-nav-lib.min.js" />

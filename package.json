@@ -1,34 +1,42 @@
 {
-  "name": "dpad-nav-lib",
-  "version": "0.0.0",
-  "dependencies": {},
-  "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-copy": "~0.4.1",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-uglify": "~0.2.0",
-    "grunt-contrib-compass": "~0.5.0",
-    "grunt-contrib-jshint": "~0.6.3",
-    "grunt-contrib-cssmin": "~0.6.0",
-    "grunt-contrib-connect": "~0.5.0",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-htmlmin": "~0.1.3",
-    "grunt-bower-install": "~0.5.0",
-    "grunt-contrib-imagemin": "~0.2.0",
-    "grunt-contrib-watch": "~0.5.2",
-    "grunt-rev": "~0.1.0",
-    "grunt-autoprefixer": "~0.2.0",
-    "grunt-usemin": "~2.0.0",
-    "grunt-mocha": "~0.4.0",
-    "grunt-svgmin": "~0.2.0",
-    "grunt-concurrent": "~0.3.0",
-    "load-grunt-tasks": "~0.1.0",
-    "time-grunt": "~0.1.1",
-    "jshint-stylish": "~0.1.3",
-    "dalekjs": "0.0.8",
-    "grunt-dalek": "~0.2.0"
+  "name": "@gauntface/dpad-nav",
+  "publishConfig": {
+    "access": "public"
   },
-  "engines": {
-    "node": ">=0.8.0"
-  }
+  "version": "2.0.0",
+  "description": "A JS / TS library to make it easy to add d-pad navigation to a web app.",
+  "main": "build/node-lib/index.js",
+  "types": "build/node-lib/index.d.ts",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "gulp build",
+    "prepublish": "npm run build",
+    "test": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gauntface/dpad-navigation.git"
+  },
+  "keywords": [
+    "gauntface",
+    "dpad",
+    "navigation"
+  ],
+  "author": "gauntface",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/gauntface/dpad-navigation/issues"
+  },
+  "homepage": "https://github.com/gauntface/dpad-navigation#readme",
+  "devDependencies": {
+    "@hopin/wbt-clean": "0.0.126",
+    "@hopin/wbt-ts-browser": "0.0.126",
+    "@hopin/wbt-ts-node": "0.0.126",
+    "gulp": "^4.0.2"
+  },
+  "files": [
+    "build/"
+  ]
 }

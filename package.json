@@ -10,7 +10,7 @@
     "test": "test"
   },
   "scripts": {
-    "build": gulp build,
+    "build": "gulp build",
     "test": "npm run build"
   },
   "repository": {

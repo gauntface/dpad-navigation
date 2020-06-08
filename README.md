@@ -1,27 +1,40 @@
-D-Pad Navigation Library
-=========
+# D-Pad Navigation Library
 
 ![alt text](http://i.imgur.com/1LcHG7j.png "D-Pad Navigation Library Demo Image")
 
-This library is designed to make it quick a simple to support D-Pad Navigation in a web app.
+This library makes it quick and easy to support D-Pad Navigation in a web app.
 
-Usage
------
+## Install
+
+```shell
+npm install @gauntface/dpad-nav --save-dev
+```
+
+Alternatively, you can use a CDN to import one of the following:
+
+**DPad Helper & (Optional) Debugger Helper**
+
+```html
+<script src="https://unpkg.com/@gauntface/dpad-nav@2.0.1/build/cdn/bootstrap/dpad.js" async defer></script>
+<script src="https://unpkg.com/@gauntface/dpad-nav@2.0.1/build/cdn/bootstrap/dpad-debugger.js" async defer></script>
+```
+
+**DPad Library & (Optional) Debugger Library**
+
+```html
+<script src="https://unpkg.com/@gauntface/dpad-nav@2.0.1/build/cdn/lib/dpad-controller.js" async defer></script>
+<script src="https://unpkg.com/@gauntface/dpad-nav@2.0.1/build/cdn/lib/debug-controller.js" async defer></script>
+```
+
+
+## Usage
 
 To support D-Pad navigation with this library, you need to do the following:
 
-  - Download the library’s javascript file from here: https://raw.github.com/gauntface/dpad-navigation/master/build/dpad-nav-lib.min.js
-  - Import the javascript file into your page:
-```html
-<script src="./scripts/dpad-nav-lib.min.js" />
-```
-  - Add a tabindex and class name dpad-focusable for any element you want to be     focusable.
+  - Add a `tabindex` and `class="dpad-focusable"` for any element you want to be focusable.
     For Example:
 ```html
-<div class="grid-item dpad-focusable" tabindex="0">
-        <img class="thumb" src="./images/thumbs/thumb01.jpg" />
-        <div class="title">Item 1</div>
-</div>
+<div class="dpad-focusable" tabindex="0">Example</div>
 ```
 
   - Apply styling in your css for the focus pseudo class.
@@ -32,53 +45,42 @@ To support D-Pad navigation with this library, you need to do the following:
 } 
 ```
 
-  - Apply styling for when the user clicks on a focused element via the clickdown class.
-```css  
-.grid-item.clickdown {
-        background-color: rgb(189, 195, 199);
-}
-```
+With this, you're ready to support D-Pad navigation.
 
-You should now be supporting D-Pad navigation.
+## Events
 
-Events
-------
-
-This library will trigger a normal focus and click event.
+This library will trigger a regular focus and click event.
 
 ```js
 element.addEventListener('focus', function(e) {
         console.log('Element Focused');
-}, true);
+});
 
 element.addEventListener('click', function() {
         console.log('Element Clicked');
-}, true);
+});
 ```
 
-Adding and Removing DOM Elements
---------------------------------
+## Adding and Removing DOM Elements
 
-The way the library works is that on page load or page resize, it will calculate the graph of where each nodes closest neighbours are, based purely on each elements position in the viewport.
+The library works is that on page load or page resize, it will calculate the graph of where each node's closest neighbors are, based purely on each element's position in the viewport.
 
-What the library does not do, is recalculate the graph if you add or remove elements. To support this, you need to update the elements in the graph and their connections, which is done by calling:
+What the library does not do, is recalculate the graph if you add or remove elements. To update the graph when elements are added or removed from the DOM call `update()` like so:
 
 ```js
-window.dpadFocusController.reset();
+window.dpad.update();
 ```
 
-Tabindex and Browser Focus
----------------------------
+## Tabindex and Browser Focus
 
-With the tabindex property you can determine the order in which a view is focused when you hit the tab key. The ordering is ignored by this library, tabindex is needed to ensure the browser allows an element to gain focus, however the order will still be applied if you hit tab on the keyboard.
+With the tabindex property, you can determine the order of which view is focused when the user presses the tab key. This library ignores the tabindex order but requires it to ensure the browser allows an element to gain focus.
 
-Debugging
----------
+## Debugging
 
-There is a debug option to display lines which indicate the link between each node.
+If you add the debug library to your web page you can toggle debug mode like so:
 
 ```js
-window.dpadFocusController.toggleDebugMode();
+window.dpaddebug.toggleDebugMode();
 ```
 
 ![alt text](http://i.imgur.com/7PT6tAa.png "D-Pad Navigation Library Demo Debug Mode Image")

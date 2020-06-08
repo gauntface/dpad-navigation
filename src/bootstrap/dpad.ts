@@ -25,5 +25,5 @@ window.addEventListener('resize', () => {
 	if(!window.dpad) {
 		return;
 	}
-	window.dpad.updateFocusGraph();
+	window.dpad.update();
 });

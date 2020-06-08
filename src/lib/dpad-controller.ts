@@ -31,7 +31,7 @@ export class DPadController {
       this.setCurrentFocusItem(0);
     }
 
-    this.updateFocusGraph();
+    this.update();
 
     // Set up binding to listen for key presses
     document.addEventListener('keydown', (e) => {
@@ -87,7 +87,7 @@ export class DPadController {
     this.currentlyFocusedItem.focus();
   }
 
-  updateFocusGraph() {
+  update() {
     for(const fi of this.focusableItems) {
         // If the element can't be focused, skip it.
         if(!fi.isFocusable()) {

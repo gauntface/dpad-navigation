@@ -11,23 +11,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-function setFocusEvent(element) {
-	'use strict';
+import {DPadController} from '../lib/dpad-controller';
 
-	element.addEventListener('focus', function(e) {
-		console.log('Element Focused');
-	}, true);
-
-	element.addEventListener('click', function() {
-		console.log('Element Clicked');
-	}, true);
+declare global {
+  interface Window { dpad: DPadController; }
 }
 
-window.addEventListener('load', function() {
-	'use strict';
+window.addEventListener('load', () => {
+	window.dpad = window.dpad || new DPadController();
+});
 
-	var gridItems = document.querySelectorAll('.grid-item');
-	for(var i = 0; i < gridItems.length; i++) {
-		setFocusEvent(gridItems[i]);
+window.addEventListener('resize', () => {
+	if(!window.dpad) {
+		return;
 	}
-}, true);
+	window.dpad.updateFocusGraph();
+});

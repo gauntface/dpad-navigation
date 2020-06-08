@@ -5,12 +5,14 @@
   },
   "version": "2.0.0",
   "description": "A JS / TS library to make it easy to add d-pad navigation to a web app.",
-  "main": "index.js",
+  "main": "build/node-lib/index.js",
+  "types": "build/node-lib/index.d.ts",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "build": "gulp build",
+    "prepublish": "npm run build",
     "test": "npm run build"
   },
   "repository": {
@@ -31,6 +33,10 @@
   "devDependencies": {
     "@hopin/wbt-clean": "0.0.126",
     "@hopin/wbt-ts-browser": "0.0.126",
+    "@hopin/wbt-ts-node": "0.0.126",
     "gulp": "^4.0.2"
-  }
+  },
+  "files": [
+    "build/"
+  ]
 }

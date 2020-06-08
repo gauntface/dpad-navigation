@@ -47,6 +47,14 @@ export class DPadController {
     this.enabled = enabled;
   }
 
+  disable() {
+    this.setState(false);
+  }
+
+  enable() {
+    this.setState(true);
+  }
+
   findFocusableItems() {
     const focusableItems: NodeListOf<HTMLElement> = document.querySelectorAll(FOCUSABLE_ITEM_SELECTOR);
     for(const fi of focusableItems) {

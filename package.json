@@ -1,5 +1,8 @@
 {
   "name": "@gauntface/dpad-nav",
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "2.0.0",
   "description": "A JS / TS library to make it easy to add d-pad navigation to a web app.",
   "main": "index.js",

@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A JS / TS library to make it easy to add d-pad navigation to a web app.",
   "main": "build/node-lib/index.js",
   "types": "build/node-lib/index.d.ts",

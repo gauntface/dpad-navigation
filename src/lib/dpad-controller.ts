@@ -20,6 +20,7 @@ const FOCUSABLE_ITEM_SELECTOR = '.dpad-focusable';
 export class DPadController {
   private focusableItems: Array<FocusableItem> = [];
   private currentlyFocusedItem: FocusableItem|null = null;
+  private enabled: boolean = false;
 
   constructor() {
     this.focusableItems = [];
@@ -40,6 +41,10 @@ export class DPadController {
     document.addEventListener('keyup', (e) => {
         this.onKeyUp(e);
     });
+  }
+
+  setState(enabled: boolean) {
+    this.enabled = enabled;
   }
 
   findFocusableItems() {
@@ -86,6 +91,10 @@ export class DPadController {
   }
 
   moveFocus(direction: Point) {
+    if (!this.enabled) {
+      return;
+    }
+
     // We need an item to move down from
     // TODO: Should initialise focus if not initialised...
     if(!this.currentlyFocusedItem) {
@@ -264,6 +273,7 @@ export class DPadController {
             this.moveFocus({x: 0, y: -1});
             break;
         case 13:
+        case 32:
             // Enter
             event.preventDefault();
             if(this.currentlyFocusedItem) {

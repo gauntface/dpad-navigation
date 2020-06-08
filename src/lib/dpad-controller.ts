@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import {FocusableItem, Metrics} from './_focusable-item';
+import {calcDistance} from './_calc-distance';
 
 const FOCUSABLE_ITEM_SELECTOR = '.dpad-focusable';
 
@@ -84,7 +85,38 @@ export class DPadController {
     }
   }
 
-  updateNeighbors(fi: FocusableItem) {
+  moveFocus(direction: Point) {
+    // We need an item to move down from
+    // TODO: Should initialise focus if not initialised...
+    if(!this.currentlyFocusedItem) {
+        return;
+    }
+
+    var nextItemIndex = null;
+    if(direction.y === 0) {
+        if(direction.x > 0) {
+            // Move Right
+            nextItemIndex = this.currentlyFocusedItem.getRightFocusItemIndex();
+        } else {
+            // Move Left
+            nextItemIndex = this.currentlyFocusedItem.getLeftFocusItemIndex();
+        }
+    } else if(direction.x === 0) {
+        if(direction.y > 0) {
+            // Move Up
+            nextItemIndex = this.currentlyFocusedItem.getTopFocusItemIndex();
+        } else {
+            // Move Down
+            nextItemIndex = this.currentlyFocusedItem.getBottomFocusItemIndex();
+        }
+    }
+
+    if(nextItemIndex !== null) {
+        this.setCurrentFocusItem(nextItemIndex);
+    }
+  }
+
+  private updateNeighbors(fi: FocusableItem) {
     const metrics = fi.getMetrics();
 
     const itemCount = this.focusableItems.length;
@@ -134,115 +166,77 @@ export class DPadController {
     }
   }
 
-  getTopDistance(fromMetrics: Metrics, toMetrics: Metrics) {
+  private verticalDistance(fromMetrics: Metrics, toMetrics: Metrics, higher: Metrics, lower: Metrics) {
+    if (higher.bottom > lower.top) {
+      return null;
+    }
+
+    const left = Math.abs(fromMetrics.center.x - toMetrics.left);
+    const right = Math.abs(fromMetrics.center.x - toMetrics.right);
+
+    const x = Math.min(
+      Math.abs(fromMetrics.center.x - toMetrics.left),
+      Math.abs(fromMetrics.center.x - toMetrics.center.x),
+      Math.abs(fromMetrics.center.x - toMetrics.right),
+    );
+    const y = lower.center.y - higher.center.y;
+
+    const angleLeft = Math.atan(y / left) * (180/Math.PI);
+    const angleRight = Math.atan(y / right) * (180/Math.PI);
+    // If the angle is too shallow it's not really up
+    if(!(angleLeft >= 0 && angleRight <= 180)) {
+        return null;
+    }
+
+    return calcDistance(x, y);
+  }
+
+  private getTopDistance(fromMetrics: Metrics, toMetrics: Metrics) {
     // Move Up
-    if (toMetrics.bottom > fromMetrics.top) {
-      return null;
-    }
-
-    const left = Math.abs(fromMetrics.center.x - toMetrics.left);
-    const right = Math.abs(fromMetrics.center.x - toMetrics.right);
-
-    const x = Math.min(
-      Math.abs(fromMetrics.center.x - toMetrics.left),
-      Math.abs(fromMetrics.center.x - toMetrics.center.x),
-      Math.abs(fromMetrics.center.x - toMetrics.right),
-    );
-    const y = fromMetrics.center.y - toMetrics.center.y;
-
-    const angleLeft = Math.atan(y / left) * (180/Math.PI);
-    const angleRight = Math.atan(y / right) * (180/Math.PI);
-    // If the angle is too shallow it's not really up
-    if(!(angleLeft >= 0 && angleRight <= 180)) {
-        return null;
-    }
-
-    return this.calcDistance(x, y);
+    return this.verticalDistance(fromMetrics, toMetrics, toMetrics, fromMetrics);
   }
 
-  getBottomDistance(fromMetrics: Metrics, toMetrics: Metrics) {
+  private getBottomDistance(fromMetrics: Metrics, toMetrics: Metrics) {
     // Move Down
-    if (fromMetrics.bottom > toMetrics.top) {
+    return this.verticalDistance(fromMetrics, toMetrics, fromMetrics, toMetrics);
+  }
+
+  private horizontalDistance(fromMetrics: Metrics, toMetrics: Metrics, lefter: Metrics, righter: Metrics) {
+    if (lefter.right > righter.left) {
       return null;
     }
 
-    const left = Math.abs(fromMetrics.center.x - toMetrics.left);
-    const right = Math.abs(fromMetrics.center.x - toMetrics.right);
+    const top = Math.abs(fromMetrics.center.y - toMetrics.top);
+    const bottom = Math.abs(fromMetrics.center.y - toMetrics.bottom);
 
-    const x = Math.min(
-      Math.abs(fromMetrics.center.x - toMetrics.left),
-      Math.abs(fromMetrics.center.x - toMetrics.center.x),
-      Math.abs(fromMetrics.center.x - toMetrics.right),
+    const x = righter.center.x - lefter.center.x;
+    const y = Math.min(
+      Math.abs(fromMetrics.center.y - toMetrics.top),
+      Math.abs(fromMetrics.center.y - toMetrics.center.y),
+      Math.abs(fromMetrics.center.y - toMetrics.bottom),
     );
-    const y = toMetrics.center.y - fromMetrics.center.y;
 
-    const angleLeft = Math.atan(y / left) * (180/Math.PI);
-    const angleRight = Math.atan(y / right) * (180/Math.PI);
+    var angleTop = Math.atan(x / top) * (180/Math.PI);
+    var angleBottom = Math.atan(x / bottom) * (180/Math.PI);
     // If the angle is too shallow it's not really up
-    if(!(angleLeft >= 0 && angleRight <= 180)) {
+    if(!(angleTop >= 0 && angleBottom <= 180)) {
         return null;
     }
 
-    return this.calcDistance(x, y);
+    return calcDistance(x, y);
   }
 
-  getLeftDistance = function(fromMetrics: Metrics, toMetrics: Metrics) {
+  private getLeftDistance(fromMetrics: Metrics, toMetrics: Metrics) {
     // Move Left
-    if (toMetrics.right > fromMetrics.left) {
-      return null;
-    }
-
-    const top = Math.abs(fromMetrics.center.y - toMetrics.top);
-    const bottom = Math.abs(fromMetrics.center.y - toMetrics.bottom);
-
-    const x = fromMetrics.center.x - toMetrics.center.x;
-    const y = Math.min(
-      Math.abs(fromMetrics.center.y - toMetrics.top),
-      Math.abs(fromMetrics.center.y - toMetrics.center.y),
-      Math.abs(fromMetrics.center.y - toMetrics.bottom),
-    );
-
-    var angleTop = Math.atan(x / top) * (180/Math.PI);
-    var angleBottom = Math.atan(x / bottom) * (180/Math.PI);
-    // If the angle is too shallow it's not really up
-    if(!(angleTop >= 0 && angleBottom <= 180)) {
-        return null;
-    }
-
-    return this.calcDistance(x, y);
+    return this.horizontalDistance(fromMetrics, toMetrics, toMetrics, fromMetrics);
   }
 
-  getRightDistance = function(fromMetrics: Metrics, toMetrics: Metrics) {
+  private getRightDistance = function(fromMetrics: Metrics, toMetrics: Metrics) {
     // Move Right
-    if (fromMetrics.right > toMetrics.left) {
-      return null;
-    }
-
-    const top = Math.abs(fromMetrics.center.y - toMetrics.top);
-    const bottom = Math.abs(fromMetrics.center.y - toMetrics.bottom);
-
-    const x = toMetrics.center.x - fromMetrics.center.x;
-    const y = Math.min(
-      Math.abs(fromMetrics.center.y - toMetrics.top),
-      Math.abs(fromMetrics.center.y - toMetrics.center.y),
-      Math.abs(fromMetrics.center.y - toMetrics.bottom),
-    );
-
-    var angleTop = Math.atan(x / top) * (180/Math.PI);
-    var angleBottom = Math.atan(x / bottom) * (180/Math.PI);
-    // If the angle is too shallow it's not really up
-    if(!(angleTop >= 0 && angleBottom <= 180)) {
-        return null;
-    }
-
-    return this.calcDistance(x, y);
+    return this.horizontalDistance(fromMetrics, toMetrics, fromMetrics, toMetrics);
   }
 
-  calcDistance(x: number, y: number): number {
-    return Math.floor(Math.sqrt((x * x) + (y * y)));
-  }
-
-  onKeyDown(event: KeyboardEvent) {
+  private onKeyDown(event: KeyboardEvent) {
     'use strict';
 
     switch(event.keyCode) {
@@ -279,7 +273,7 @@ export class DPadController {
     }
   }
 
-  onKeyUp(event: KeyboardEvent) {
+  private onKeyUp(event: KeyboardEvent) {
     switch(event.keyCode) {
         case 13:
             // Enter
@@ -288,37 +282,6 @@ export class DPadController {
                 this.currentlyFocusedItem.onItemClickStateChange(false);
             }
             break;
-    }
-};
-
-  moveFocus(direction: Point) {
-    // We need an item to move down from
-    // TODO: Should initialise focus if not initialised...
-    if(!this.currentlyFocusedItem) {
-        return;
-    }
-
-    var nextItemIndex = null;
-    if(direction.y === 0) {
-        if(direction.x > 0) {
-            // Move Right
-            nextItemIndex = this.currentlyFocusedItem.getRightFocusItemIndex();
-        } else {
-            // Move Left
-            nextItemIndex = this.currentlyFocusedItem.getLeftFocusItemIndex();
-        }
-    } else if(direction.x === 0) {
-        if(direction.y > 0) {
-            // Move Up
-            nextItemIndex = this.currentlyFocusedItem.getTopFocusItemIndex();
-        } else {
-            // Move Down
-            nextItemIndex = this.currentlyFocusedItem.getBottomFocusItemIndex();
-        }
-    }
-
-    if(nextItemIndex !== null) {
-        this.setCurrentFocusItem(nextItemIndex);
     }
   }
 }

@@ -1,5 +1,6 @@
 import {DPadController} from './dpad-controller';
 import { FocusableItem } from './_focusable-item';
+import {calcDistance} from './_calc-distance';
 
 const DBEUG_LINE_CLASSNAME = 'dpad-debugger-line'
 const DEBUG_LINE_SELECTOR = `.${DBEUG_LINE_CLASSNAME}`;
@@ -58,14 +59,14 @@ export class DebugController {
     }
   }
 
-  clearDisplay = function() {
+  private clearDisplay = function() {
     const debugLines = document.querySelectorAll(DEBUG_LINE_SELECTOR);
     for(const dl of debugLines) {
       dl.remove();
     }
   }
 
-  printDebugLinesForItem(index: number, focusableItem: FocusableItem) {
+  private printDebugLinesForItem(index: number, focusableItem: FocusableItem) {
     const markerIndex = index % MARKER_COLORS.length;
     const markerColor = MARKER_COLORS[markerIndex];
 
@@ -79,7 +80,7 @@ export class DebugController {
 
       const angle = ((Math.atan2(xDist, yDist) * 180) / Math.PI) + 180;
 
-      this.printDebugLine(this.calcDistance(xDist, yDist), (currentItemMetrics.center.x-5), currentItemMetrics.top, markerColor, angle);
+      this.printDebugLine(calcDistance(xDist, yDist), (currentItemMetrics.center.x-5), currentItemMetrics.top, markerColor, angle);
     }
 
     const bottomIndex = focusableItem.getBottomFocusItemIndex(); 
@@ -90,7 +91,7 @@ export class DebugController {
 
         const angle = ((Math.atan2(xDist, yDist) * 180) / Math.PI) + 360;
 
-        this.printDebugLine(this.calcDistance(xDist, yDist), (currentItemMetrics.center.x+5), currentItemMetrics.bottom, markerColor, angle);
+        this.printDebugLine(calcDistance(xDist, yDist), (currentItemMetrics.center.x+5), currentItemMetrics.bottom, markerColor, angle);
     }
 
     const leftIndex = focusableItem.getLeftFocusItemIndex();
@@ -111,7 +112,7 @@ export class DebugController {
 
         console.log('angle: ', angle);
 
-        this.printDebugLine(this.calcDistance(xDist, yDist), currentItemMetrics.left, currentItemMetrics.center.y + 5, markerColor, angle);
+        this.printDebugLine(calcDistance(xDist, yDist), currentItemMetrics.left, currentItemMetrics.center.y + 5, markerColor, angle);
     }
 
     const rightIndex = focusableItem.getRightFocusItemIndex();
@@ -122,11 +123,11 @@ export class DebugController {
 
       const angle = ((Math.atan2(xDist, yDist) * 180) / Math.PI) + 180;
 
-      this.printDebugLine(this.calcDistance(xDist, yDist), currentItemMetrics.right, currentItemMetrics.center.y - 5, markerColor, angle);
+      this.printDebugLine(calcDistance(xDist, yDist), currentItemMetrics.right, currentItemMetrics.center.y - 5, markerColor, angle);
     }
   }
 
-  printDebugLine(length: number, startX: number, startY: number, color: string, angle: number) {
+  private printDebugLine(length: number, startX: number, startY: number, color: string, angle: number) {
     const lineElement = document.createElement('div');
     lineElement.classList.add(DBEUG_LINE_CLASSNAME);
     lineElement.classList.add('marker');
@@ -140,9 +141,5 @@ export class DebugController {
     lineElement.style.transform = 'rotate('+angle+'deg)';
     lineElement.style.transformOrigin = '0% 0%';
     document.body.appendChild(lineElement);
-  }
-
-  calcDistance(x: number, y: number): number {
-    return Math.floor(Math.sqrt((x * x) + (y * y)));
   }
 }

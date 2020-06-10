@@ -1,16 +1,15 @@
-import {DPadController} from '../lib/dpad-controller';
+import {DpadController} from '../lib/dpad-controller';
 import {DebugController} from '../lib/debug-controller';
 
 declare global {
   interface Window {
-    dpad: DPadController|null;
+    dpad: DpadController|null;
     dpaddebug: DebugController;
   }
 }
 
 window.addEventListener('load', () => {
   window.dpaddebug = window.dpaddebug || new DebugController(window.dpad);
-  window.dpaddebug.setDebugMode(true);
 });
 
 window.addEventListener('resize', () => {

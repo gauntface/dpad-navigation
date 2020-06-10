@@ -11,14 +11,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import {DPadController} from '../lib/dpad-controller';
+import {DpadController} from '../lib/dpad-controller';
 
 declare global {
-  interface Window { dpad: DPadController; }
+  interface Window { dpad: DpadController; }
 }
 
 window.addEventListener('load', () => {
-	window.dpad = window.dpad || new DPadController();
+	window.dpad = window.dpad || new DpadController();
+	window.dpad.update();
 });
 
 window.addEventListener('resize', () => {

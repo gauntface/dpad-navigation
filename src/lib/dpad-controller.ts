@@ -17,21 +17,13 @@ import {calcDistance} from './_calc-distance';
 
 const FOCUSABLE_ITEM_SELECTOR = '.dpad-focusable';
 
-export class DPadController {
+export class DpadController {
   private focusableItems: Array<FocusableItem> = [];
   private currentlyFocusedItem: FocusableItem|null = null;
   private enabled: boolean = false;
 
   constructor() {
     this.focusableItems = [];
-
-    this.findFocusableItems();
-
-    if(this.focusableItems.length > 0) {
-      this.setCurrentFocusItem(0);
-    }
-
-    this.update();
 
     // Set up binding to listen for key presses
     document.addEventListener('keydown', (e) => {
@@ -88,6 +80,8 @@ export class DPadController {
   }
 
   update() {
+    this.findFocusableItems();
+    
     for(const fi of this.focusableItems) {
         // If the element can't be focused, skip it.
         if(!fi.isFocusable()) {

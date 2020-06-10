@@ -14,14 +14,14 @@ gulp.task('clean', gulp.series(
 gulp.task('build-browser-lib', gulp.series(
   tsBrowser.gulpBuild('gauntface.dpad', {
     src: path.join(src, 'lib'),
-    dst: path.join(dst, 'browser-lib'),
+    dst: path.join(dst, 'browser'),
   })
 ));
 
-gulp.task('build-browser-bootstrap', gulp.series(
+gulp.task('build-browser-helper', gulp.series(
   tsBrowser.gulpBuild('gauntface.dpad', {
-    src: path.join(src, 'bootstrap'),
-    dst: path.join(dst, 'cdn'),
+    src: path.join(src, 'helper'),
+    dst: path.join(dst, 'helper'),
     rootDir: src,
   })
 ));
@@ -38,7 +38,7 @@ gulp.task('build',
     'clean',
     gulp.parallel(
       'build-browser-lib',
-      'build-browser-bootstrap',
+      'build-browser-helper',
       'build-node-lib',
     ),
   )

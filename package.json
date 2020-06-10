@@ -37,6 +37,7 @@
     "gulp": "^4.0.2"
   },
   "files": [
-    "build/"
+    "build/",
+    "src/"
   ]
 }

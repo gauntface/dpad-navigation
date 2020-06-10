@@ -1,4 +1,4 @@
-import {DPadController} from './dpad-controller';
+import {DpadController} from './dpad-controller';
 import { FocusableItem } from './_focusable-item';
 import {calcDistance} from './_calc-distance';
 
@@ -19,10 +19,10 @@ const MARKER_COLORS = [
 ];
 
 export class DebugController {
-  private dpad: DPadController;
+  private dpad: DpadController;
   private debugMode: boolean;
 
-  constructor(dpad: DPadController|null) {
+  constructor(dpad: DpadController|null) {
     if (!dpad) {
       console.error(`Unable to debug since the dpad controller is not defined.`);    
     }

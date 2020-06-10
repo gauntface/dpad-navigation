@@ -98,19 +98,10 @@ export class DebugController {
     if(leftIndex !== null) {
         const leftMetrics = this.dpad.getFocusableItem(leftIndex).getMetrics();
         
-        console.log('leftIndex: ', leftIndex);
-        console.log('leftMetrics: ', leftMetrics);
-        console.log('currentItemMetrics: ', currentItemMetrics);
-        
         const xDist = leftMetrics.center.x - currentItemMetrics.left;
         const yDist = currentItemMetrics.center.y - leftMetrics.center.y;
 
-        console.log('xDist: ', xDist);
-        console.log('yDist: ', yDist);
-
         const angle = ((Math.atan2(xDist, yDist) * 180) / Math.PI) + 180;
-
-        console.log('angle: ', angle);
 
         this.printDebugLine(calcDistance(xDist, yDist), currentItemMetrics.left, currentItemMetrics.center.y + 5, markerColor, angle);
     }

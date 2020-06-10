@@ -24,27 +24,32 @@ export class DpadController {
 
   constructor() {
     this.focusableItems = [];
-
-    // Set up binding to listen for key presses
-    document.addEventListener('keydown', (e) => {
-      this.onKeyDown(e);
-    });
-
-    document.addEventListener('keyup', (e) => {
-        this.onKeyUp(e);
-    });
-  }
-
-  setState(enabled: boolean) {
-    this.enabled = enabled;
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
+    this.enable()
   }
 
   disable() {
-    this.setState(false);
+    if (!this.enabled) {
+      return
+    }
+
+    document.removeEventListener('keydown', this.onKeyDown);
+    document.removeEventListener('keyup', this.onKeyUp);
+
+    this.enabled = false;
   }
 
   enable() {
-    this.setState(true);
+    if (this.enabled) {
+      return
+    }
+
+    // Set up binding to listen for key presses
+    document.addEventListener('keydown', this.onKeyDown);
+    document.addEventListener('keyup', this.onKeyUp);
+
+    this.enabled = true;
   }
 
   findFocusableItems() {
@@ -81,7 +86,7 @@ export class DpadController {
 
   update() {
     this.findFocusableItems();
-    
+
     for(const fi of this.focusableItems) {
         // If the element can't be focused, skip it.
         if(!fi.isFocusable()) {
@@ -93,13 +98,11 @@ export class DpadController {
   }
 
   moveFocus(direction: Point) {
-    if (!this.enabled) {
-      return;
-    }
-
     // We need an item to move down from
-    // TODO: Should initialise focus if not initialised...
     if(!this.currentlyFocusedItem) {
+        if (this.focusableItems.length > 0) {
+          this.setCurrentFocusItem(0);
+        }
         return;
     }
 
@@ -248,8 +251,6 @@ export class DpadController {
   }
 
   private onKeyDown(event: KeyboardEvent) {
-    'use strict';
-
     switch(event.keyCode) {
         case 9:
             // Tab

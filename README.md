@@ -52,8 +52,8 @@ With the HTML setup, you can use the helper library by adding the following to y
 HTML pages:
 
 ```html
-<script src="https://unpkg.com/@gauntface/dpad-nav@3.0.0/build/helper/helper/dpad.js" async defer></script>
-<script src="https://unpkg.com/@gauntface/dpad-nav@3.0.0/build/helper/helper/dpad-debugger.js" async defer></script>
+<script src="https://unpkg.com/@gauntface/dpad-nav@3.0.1/build/helper/helper/dpad.js" async defer></script>
+<script src="https://unpkg.com/@gauntface/dpad-nav@3.0.1/build/helper/helper/dpad-debugger.js" async defer></script>
 ```
 
 These scripts will add listeners to apply the dpad library to your pages and the `dpad-debugger.js` will
@@ -81,8 +81,8 @@ If you want to use the library directly and avoid the helpers, you can take one 
 Use a CDN hosted copy of the library:
 
 ```html
-<script src="https://unpkg.com/@gauntface/dpad-nav@3.0.0/build/browser/dpad-controller.js" async defer></script>
-<script src="https://unpkg.com/@gauntface/dpad-nav@3.0.0/build/browser/debug-controller.js" async defer></script>
+<script src="https://unpkg.com/@gauntface/dpad-nav@3.0.1/build/browser/dpad-controller.js" async defer></script>
+<script src="https://unpkg.com/@gauntface/dpad-nav@3.0.1/build/browser/debug-controller.js" async defer></script>
 ```
 
 The libraries will be accesible via `window.gauntface.dpad.DpadController` and `window.gauntface.dpad.DebugController`;

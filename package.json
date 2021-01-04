@@ -34,7 +34,7 @@
     "@hopin/wbt-clean": "0.0.126",
     "@hopin/wbt-ts-browser": "0.0.126",
     "@hopin/wbt-ts-node": "0.0.126",
-    "gulp": "^4.0.2"
+    "gulp": "4.0.2"
   },
   "files": [
     "build/",

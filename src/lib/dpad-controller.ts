@@ -85,12 +85,26 @@ export class DpadController {
   }
 
   update() {
+    // Reset focusable items array so it doesn't have duplicates
+    // added to it with every update call
+    this.focusableItems = [];
     this.findFocusableItems();
+
+    // Need to reset currently focused item so that we can replace it
+    // with the new FocusableItem in the focusableItems array
+    const previouslyFocusedItem: FocusableItem = this.currentlyFocusedItem;
+    this.currentlyFocusedItem = null;
 
     for(const fi of this.focusableItems) {
         // If the element can't be focused, skip it.
         if(!fi.isFocusable()) {
             continue;
+        }
+
+        // Check if the element that was the focused item still exists
+        // and set it as the currentlyFocusedItem if so
+        if(previouslyFocusedItem && fi.getElement() == previouslyFocusedItem.getElement()){
+          this.currentlyFocusedItem = fi;
         }
 
         this.updateNeighbors(fi);

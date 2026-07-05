@@ -83,19 +83,13 @@ export class FocusableItem {
       return false;
     }
 
-    let tabIndexAttr = this.element.getAttribute('tabindex');
+    const tabIndexAttr = this.element.getAttribute('tabindex');
     if (!tabIndexAttr) {
       return false
     }
-    
-    try {
-      const tabIndex = parseInt(tabIndexAttr, 10)
-      return tabIndex > -1;
-    } catch (err) {
-      // NOOP
-    }
 
-    return false;
+    const tabIndex = parseInt(tabIndexAttr, 10)
+    return tabIndex > -1;
   }
 
   getMetrics(): Metrics {

@@ -127,3 +127,83 @@ describe('DpadController neighbor detection', () => {
     expect(dpad.getFocusableItem(0)!.getTopFocusItemIndex()).toBeNull();
   });
 });
+
+describe('DpadController.moveFocus / update', () => {
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
+
+  it('focuses the first item when nothing is focused yet', () => {
+    const elements = buildGrid();
+    const dpad = new DpadController();
+    dpad.update();
+
+    dpad.moveFocus({x: 1, y: 0});
+
+    expect(document.activeElement).toBe(elements[0]);
+  });
+
+  it('does nothing when moving focus with no focusable items', () => {
+    const dpad = new DpadController();
+    dpad.update();
+
+    expect(() => dpad.moveFocus({x: 1, y: 0})).not.toThrow();
+    expect(document.activeElement).not.toBe(null);
+  });
+
+  it('moves focus to the neighbor in the given direction', () => {
+    const elements = buildGrid();
+    const dpad = new DpadController();
+    dpad.update();
+    dpad.setCurrentFocusItem(4);
+
+    dpad.moveFocus({x: 1, y: 0});
+    expect(document.activeElement).toBe(elements[5]);
+
+    dpad.moveFocus({x: 0, y: -1});
+    expect(document.activeElement).toBe(elements[8]);
+
+    dpad.moveFocus({x: -1, y: 0});
+    expect(document.activeElement).toBe(elements[7]);
+
+    dpad.moveFocus({x: 0, y: 1});
+    expect(document.activeElement).toBe(elements[4]);
+  });
+
+  it('does not move focus when there is no neighbor in that direction', () => {
+    const elements = buildGrid();
+    const dpad = new DpadController();
+    dpad.update();
+    dpad.setCurrentFocusItem(0);
+
+    dpad.moveFocus({x: 0, y: 1});
+
+    expect(document.activeElement).toBe(elements[0]);
+  });
+
+  it('does not duplicate items when update() is called more than once', () => {
+    buildGrid();
+    const dpad = new DpadController();
+
+    dpad.update();
+    dpad.update();
+
+    expect(dpad.getFocusableItems()).toHaveLength(9);
+  });
+
+  // Regression test for 4ba8367 ("fix update call duplication issue"): a
+  // second update() call used to lose track of the currently focused item,
+  // so moveFocus() would fall back to focusing index 0 instead of
+  // continuing to navigate from where the user actually was.
+  it('preserves the currently focused item across an update() call', () => {
+    const elements = buildGrid();
+    const dpad = new DpadController();
+    dpad.update();
+    dpad.setCurrentFocusItem(4);
+
+    dpad.update();
+    dpad.moveFocus({x: 1, y: 0});
+
+    expect(document.activeElement).toBe(elements[5]);
+  });
+});

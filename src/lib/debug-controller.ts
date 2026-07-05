@@ -19,12 +19,12 @@ const MARKER_COLORS = [
 ];
 
 export class DebugController {
-  private dpad: DpadController;
+  private dpad: DpadController|null;
   private debugMode: boolean;
 
   constructor(dpad: DpadController|null) {
     if (!dpad) {
-      console.error(`Unable to debug since the dpad controller is not defined.`);    
+      console.error(`Unable to debug since the dpad controller is not defined.`);
     }
     this.dpad = dpad;
     this.debugMode = false;
@@ -43,7 +43,7 @@ export class DebugController {
   updateDisplay() {
     this.clearDisplay();
 
-    if (!this.debugMode) {
+    if (!this.debugMode || !this.dpad) {
       return
     }
 
@@ -74,7 +74,7 @@ export class DebugController {
 
     const topIndex = focusableItem.getTopFocusItemIndex();
     if(topIndex !== null) {
-      const topMetrics = this.dpad.getFocusableItem(topIndex).getMetrics();
+      const topMetrics = this.dpad!.getFocusableItem(topIndex)!.getMetrics();
       const xDist = topMetrics.center.x - currentItemMetrics.center.x;
       const yDist = currentItemMetrics.top - topMetrics.center.y;
 
@@ -85,7 +85,7 @@ export class DebugController {
 
     const bottomIndex = focusableItem.getBottomFocusItemIndex(); 
     if(bottomIndex !== null) {
-        const bottomMetrics = this.dpad.getFocusableItem(bottomIndex).getMetrics();
+        const bottomMetrics = this.dpad!.getFocusableItem(bottomIndex)!.getMetrics();
         const xDist = currentItemMetrics.center.x - bottomMetrics.center.x;
         const yDist = bottomMetrics.center.y - currentItemMetrics.bottom;
 
@@ -96,7 +96,7 @@ export class DebugController {
 
     const leftIndex = focusableItem.getLeftFocusItemIndex();
     if(leftIndex !== null) {
-        const leftMetrics = this.dpad.getFocusableItem(leftIndex).getMetrics();
+        const leftMetrics = this.dpad!.getFocusableItem(leftIndex)!.getMetrics();
         
         const xDist = leftMetrics.center.x - currentItemMetrics.left;
         const yDist = currentItemMetrics.center.y - leftMetrics.center.y;
@@ -108,7 +108,7 @@ export class DebugController {
 
     const rightIndex = focusableItem.getRightFocusItemIndex();
     if(rightIndex !== null) {
-      const rightMetrics = this.dpad.getFocusableItem(rightIndex).getMetrics();
+      const rightMetrics = this.dpad!.getFocusableItem(rightIndex)!.getMetrics();
       const xDist = rightMetrics.center.x - currentItemMetrics.right;
       const yDist = currentItemMetrics.center.y - rightMetrics.center.y;
 

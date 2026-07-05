@@ -18,7 +18,7 @@ export class FocusableItem {
   private element: HTMLElement;
   private focusState: boolean = false;
 
-  private neighbors: Neighbors;
+  private neighbors!: Neighbors;
 
   constructor(ele: HTMLElement) {
     this.element = ele;
@@ -46,7 +46,7 @@ export class FocusableItem {
     this.neighbors.top = index;
   };
 
-  getTopFocusItemIndex(): number {
+  getTopFocusItemIndex(): number|null {
     return this.neighbors.top;
   };
 
@@ -54,7 +54,7 @@ export class FocusableItem {
     this.neighbors.bottom = index;
   };
 
-  getBottomFocusItemIndex(): number {
+  getBottomFocusItemIndex(): number|null {
     return this.neighbors.bottom;
   };
 
@@ -62,7 +62,7 @@ export class FocusableItem {
     this.neighbors.left = index;
   };
 
-  getLeftFocusItemIndex(): number {
+  getLeftFocusItemIndex(): number|null {
     return this.neighbors.left;
   };
 
@@ -70,7 +70,7 @@ export class FocusableItem {
     this.neighbors.right = index;
   };
 
-  getRightFocusItemIndex(): number {
+  getRightFocusItemIndex(): number|null {
     return this.neighbors.right;
   };
 

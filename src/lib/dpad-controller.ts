@@ -92,7 +92,7 @@ export class DpadController {
 
     // Need to reset currently focused item so that we can replace it
     // with the new FocusableItem in the focusableItems array
-    const previouslyFocusedItem: FocusableItem = this.currentlyFocusedItem;
+    const previouslyFocusedItem: FocusableItem|null = this.currentlyFocusedItem;
     this.currentlyFocusedItem = null;
 
     for(const fi of this.focusableItems) {
@@ -158,7 +158,7 @@ export class DpadController {
       var newItem = this.getFocusableItem(i);
       // If the element can't be focused, or is the current element,
       // skip it.
-      if(!newItem.isFocusable() || newItem === fi) {
+      if(!newItem || !newItem.isFocusable() || newItem === fi) {
           continue;
       }
 
@@ -259,7 +259,7 @@ export class DpadController {
     return this.horizontalDistance(fromMetrics, toMetrics, toMetrics, fromMetrics);
   }
 
-  private getRightDistance = function(fromMetrics: Metrics, toMetrics: Metrics) {
+  private getRightDistance = function(this: DpadController, fromMetrics: Metrics, toMetrics: Metrics) {
     // Move Right
     return this.horizontalDistance(fromMetrics, toMetrics, fromMetrics, toMetrics);
   }

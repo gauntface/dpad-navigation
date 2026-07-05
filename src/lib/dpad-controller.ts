@@ -103,7 +103,7 @@ export class DpadController {
 
         // Check if the element that was the focused item still exists
         // and set it as the currentlyFocusedItem if so
-        if(previouslyFocusedItem && fi.getElement() == previouslyFocusedItem.getElement()){
+        if(previouslyFocusedItem && fi.getElement() === previouslyFocusedItem.getElement()){
           this.currentlyFocusedItem = fi;
         }
 
@@ -120,7 +120,7 @@ export class DpadController {
         return;
     }
 
-    var nextItemIndex = null;
+    let nextItemIndex = null;
     if(direction.y === 0) {
         if(direction.x > 0) {
             // Move Right
@@ -154,8 +154,8 @@ export class DpadController {
     let minLeftElementDist;
     let minRightElementDist;
 
-    for(var i = 0; i < itemCount; i++) {
-      var newItem = this.getFocusableItem(i);
+    for(let i = 0; i < itemCount; i++) {
+      const newItem = this.getFocusableItem(i);
       // If the element can't be focused, or is the current element,
       // skip it.
       if(!newItem || !newItem.isFocusable() || newItem === fi) {
@@ -244,8 +244,8 @@ export class DpadController {
       Math.abs(fromMetrics.center.y - toMetrics.bottom),
     );
 
-    var angleTop = Math.atan(x / top) * (180/Math.PI);
-    var angleBottom = Math.atan(x / bottom) * (180/Math.PI);
+    const angleTop = Math.atan(x / top) * (180/Math.PI);
+    const angleBottom = Math.atan(x / bottom) * (180/Math.PI);
     // If the angle is too shallow it's not really up
     if(!(angleTop >= 0 && angleBottom <= 180)) {
         return null;

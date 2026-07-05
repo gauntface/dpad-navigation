@@ -207,3 +207,36 @@ describe('DpadController.moveFocus / update', () => {
     expect(document.activeElement).toBe(elements[5]);
   });
 });
+
+describe('DpadController key handling', () => {
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
+
+  it.each([
+    ['ArrowRight', 5],
+    ['ArrowDown', 7],
+    ['ArrowLeft', 3],
+    ['ArrowUp', 1],
+  ])('moves focus on %s to the correct neighbor', (key, expectedIndex) => {
+    const elements = buildGrid();
+    const dpad = new DpadController();
+    dpad.update();
+    dpad.setCurrentFocusItem(4);
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {key}));
+
+    expect(document.activeElement).toBe(elements[expectedIndex]);
+  });
+
+  it('does not move focus on Tab', () => {
+    const elements = buildGrid();
+    const dpad = new DpadController();
+    dpad.update();
+    dpad.setCurrentFocusItem(4);
+
+    document.dispatchEvent(new KeyboardEvent('keydown', {key: 'Tab'}));
+
+    expect(document.activeElement).toBe(elements[4]);
+  });
+});

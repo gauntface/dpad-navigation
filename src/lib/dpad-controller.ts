@@ -265,33 +265,27 @@ export class DpadController {
   }
 
   private onKeyDown(event: KeyboardEvent) {
-    switch(event.keyCode) {
-        case 9:
-            // Tab
+    switch(event.key) {
+        case 'Tab':
             break;
-        case 37:
-            // Left
+        case 'ArrowLeft':
             event.preventDefault();
             this.moveFocus({x: -1, y: 0});
             break;
-        case 38:
-            // Up
+        case 'ArrowUp':
             event.preventDefault();
             this.moveFocus({x: 0, y: 1});
             break;
-        case 39:
-            // Right
+        case 'ArrowRight':
             event.preventDefault();
             this.moveFocus({x: 1, y: 0});
             break;
-        case 40:
-            // Down
+        case 'ArrowDown':
             event.preventDefault();
             this.moveFocus({x: 0, y: -1});
             break;
-        case 13:
-        case 32:
-            // Enter
+        case 'Enter':
+        case ' ':
             event.preventDefault();
             if(this.currentlyFocusedItem) {
                 this.currentlyFocusedItem.onItemClickStateChange(true);
@@ -301,9 +295,8 @@ export class DpadController {
   }
 
   private onKeyUp(event: KeyboardEvent) {
-    switch(event.keyCode) {
-        case 13:
-            // Enter
+    switch(event.key) {
+        case 'Enter':
             event.preventDefault();
             if(this.currentlyFocusedItem) {
                 this.currentlyFocusedItem.onItemClickStateChange(false);

@@ -259,7 +259,7 @@ export class DpadController {
     return this.horizontalDistance(fromMetrics, toMetrics, toMetrics, fromMetrics);
   }
 
-  private getRightDistance = function(this: DpadController, fromMetrics: Metrics, toMetrics: Metrics) {
+  private getRightDistance(fromMetrics: Metrics, toMetrics: Metrics) {
     // Move Right
     return this.horizontalDistance(fromMetrics, toMetrics, fromMetrics, toMetrics);
   }

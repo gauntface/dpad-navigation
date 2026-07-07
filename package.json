@@ -14,7 +14,7 @@
     "build": "node scripts/build.mjs",
     "lint": "eslint src",
     "prepublish": "npm run build",
-    "test": "npm run build"
+    "test": "vitest run"
   },
   "repository": {
     "type": "git",
@@ -35,8 +35,10 @@
     "@eslint/js": "^10.0.1",
     "esbuild": "^0.28.1",
     "eslint": "^10.6.0",
+    "jsdom": "^29.1.1",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.62.1"
+    "typescript-eslint": "^8.62.1",
+    "vitest": "^4.1.9"
   },
   "files": [
     "build/",

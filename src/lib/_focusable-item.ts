@@ -99,7 +99,7 @@ export class FocusableItem {
   }
 
   getMetrics(): Metrics {
-    var clientRect = this.element.getBoundingClientRect();
+    const clientRect = this.element.getBoundingClientRect();
     return {
       width: clientRect.width,
       height: clientRect.height,
@@ -114,7 +114,7 @@ export class FocusableItem {
     };
   }
 
-  onItemClickStateChange(isDown: boolean) {
+  onItemClickStateChange(_isDown: boolean) {
     // NOOP
   }
 }

@@ -18,11 +18,11 @@ export class FocusableItem {
   private element: HTMLElement;
   private focusState: boolean = false;
 
-  private neighbors!: Neighbors;
+  private neighbors: Neighbors;
 
   constructor(ele: HTMLElement) {
     this.element = ele;
-    this.resetNeighbors();
+    this.neighbors = FocusableItem.defaultNeighbors();
   }
 
   getElement() {
@@ -34,13 +34,17 @@ export class FocusableItem {
   }
 
   resetNeighbors() {
-    this.neighbors = {
+    this.neighbors = FocusableItem.defaultNeighbors();
+  };
+
+  private static defaultNeighbors(): Neighbors {
+    return {
       top: null,
       bottom: null,
       left: null,
       right: null,
     };
-  };
+  }
 
   setTopFocusItemIndex(index: number) {
     this.neighbors.top = index;

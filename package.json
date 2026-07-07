@@ -12,6 +12,7 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
+    "lint": "eslint src",
     "prepublish": "npm run build",
     "test": "npm run build"
   },
@@ -31,8 +32,11 @@
   },
   "homepage": "https://github.com/gauntface/dpad-navigation#readme",
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "esbuild": "^0.28.1",
-    "typescript": "^6.0.3"
+    "eslint": "^10.6.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.62.1"
   },
   "files": [
     "build/",

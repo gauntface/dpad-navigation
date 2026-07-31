@@ -120,11 +120,37 @@
     align-items: center;
     gap: 12px;
     padding: 12px 0;
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    font-size: 15px;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
   }
-  .checkbox-row input {
+  .checkbox-box {
     width: 20px;
     height: 20px;
-    accent-color: var(--primary);
+    flex: none;
+    border-radius: 4px;
+    border: 2px solid var(--outline);
+    position: relative;
+  }
+  .checkbox-box.checked {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+  .checkbox-box.checked::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--on-primary);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
   }
   .reset-btn {
     align-self: center;
@@ -205,12 +231,12 @@
           </div>
           <div class="panel">
             <h5>Telemetry Nodes</h5>
-            <label class="checkbox-row dpad-focusable" tabindex="22" data-node-id="show-focus-vectors" data-dpad-debug-toggle="checkbox">
-              <input type="checkbox" tabindex="-1" />Show Focus Vectors
-            </label>
-            <label class="checkbox-row dpad-focusable" tabindex="23" data-node-id="z-space-debugging">
-              <input type="checkbox" tabindex="-1" />Z-Space Debugging
-            </label>
+            <button type="button" class="checkbox-row dpad-focusable" tabindex="22" data-node-id="show-focus-vectors" data-dpad-debug-toggle="checkbox">
+              <span class="checkbox-box" aria-hidden="true"></span>Show Focus Vectors
+            </button>
+            <button type="button" class="checkbox-row dpad-focusable" tabindex="23" data-node-id="z-space-debugging">
+              <span class="checkbox-box" aria-hidden="true"></span>Z-Space Debugging
+            </button>
           </div>
         </div>
 
@@ -234,28 +260,21 @@
 <script src="lib/debug-controller.js"></script>
 <script src="lib/app.js"></script>
 <script>
-  // Cosmetic switch/checkbox toggling (not part of the library) — OK/Enter
-  // on a focused switch flips it, matching the "Press OK to toggle" pattern
-  // a real TV remote would use.
+  // Cosmetic switch/checkbox toggling (not part of the library). Both are
+  // real <button> elements, so app.js's global Enter/Space-clicks-the-
+  // focused-element bridge (see lib/app.js) already covers keyboard
+  // activation here -- this just handles the click itself.
   document.querySelectorAll('.switch').forEach((el) => {
     el.addEventListener('click', () => {
       const on = el.classList.toggle('on');
       el.setAttribute('aria-checked', String(on));
     });
-    el.addEventListener('keyup', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') el.click();
-    });
   });
   document.querySelectorAll('.checkbox-row').forEach((row) => {
-    const box = row.querySelector('input');
-    row.addEventListener('click', (e) => {
-      if (row.dataset.dpadDebugToggle) return; // handled by app.js
-      box.checked = !box.checked;
-    });
-    row.addEventListener('keyup', (e) => {
-      if ((e.key === 'Enter' || e.key === ' ') && !row.dataset.dpadDebugToggle) {
-        box.checked = !box.checked;
-      }
+    if (row.dataset.dpadDebugToggle) return; // handled by app.js
+    const box = row.querySelector('.checkbox-box');
+    row.addEventListener('click', () => {
+      box.classList.toggle('checked');
     });
   });
 </script>

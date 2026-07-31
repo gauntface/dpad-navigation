@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "lib": ["ES2019", "DOM"],
+    "module": "CommonJS",
+    "moduleResolution": "Node10",
+    "ignoreDeprecations": "6.0",
+    "declaration": true,
+    "outDir": "build/node-lib",
+    "rootDir": "src/lib",
+    "strict": false,
+    "skipLibCheck": true
+  },
+  "include": ["src/lib/**/*.ts"]
+}

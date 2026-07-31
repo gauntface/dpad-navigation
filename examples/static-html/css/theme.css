@@ -1,0 +1,275 @@
+:root {
+  --surface: #0b1326;
+  --surface-container-lowest: #060e20;
+  --surface-container-low: #131b2e;
+  --surface-container: #171f33;
+  --surface-container-high: #222a3d;
+  --surface-container-highest: #2d3449;
+  --surface-bright: #31394d;
+  --on-surface: #dae2fd;
+  --on-surface-variant: #c7c4d7;
+  --outline: #908fa0;
+  --outline-variant: #464554;
+  --primary: #c0c1ff;
+  --on-primary: #1000a9;
+  --secondary: #ddb7ff;
+  --tertiary: #2fd9f4;
+  --debug-vector: #10b981;
+  --focus-glow: rgba(99, 102, 241, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--surface);
+  color: var(--on-surface);
+  font-family: 'Hanken Grotesk', system-ui, sans-serif;
+  overflow: hidden;
+}
+
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Layout shell shared by every page */
+.app-shell {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.side-nav {
+  width: 88px;
+  flex: none;
+  background: rgba(23, 31, 51, 0.85);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid var(--outline-variant);
+  display: flex;
+  flex-direction: column;
+  padding: 32px 0;
+  z-index: 50;
+  transition: width 0.25s ease;
+}
+
+.side-nav:hover {
+  width: 240px;
+}
+
+.side-nav .brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+  margin-bottom: 48px;
+  color: var(--primary);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.side-nav .brand .icon {
+  font-size: 28px;
+  flex: none;
+}
+
+.side-nav nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.side-nav .nav-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 24px;
+  border: none;
+  border-left: 4px solid transparent;
+  background: transparent;
+  color: var(--on-surface-variant);
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: left;
+  width: 100%;
+}
+
+.side-nav .nav-item .icon {
+  flex: none;
+  font-size: 22px;
+}
+
+.side-nav .nav-item.active {
+  color: var(--primary);
+  border-left-color: var(--primary);
+  background: rgba(192, 193, 255, 0.08);
+}
+
+.side-nav .nav-item:hover {
+  color: var(--on-surface);
+  background: var(--surface-bright);
+}
+
+.side-nav .avatar {
+  margin: 0 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  flex: none;
+}
+
+.main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 64px 96px;
+  scroll-behavior: smooth;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0 40px;
+  position: sticky;
+  top: 0;
+  background: linear-gradient(to bottom, var(--surface) 60%, transparent);
+  z-index: 40;
+}
+
+.top-bar h1 {
+  font-size: 24px;
+  color: var(--primary);
+  margin: 0;
+}
+
+.top-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--surface-container-high);
+  border: 1px solid var(--outline-variant);
+  border-radius: 999px;
+  padding: 10px 24px;
+  color: var(--on-surface-variant);
+}
+
+.icon-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  background: var(--surface-container);
+  border: 2px solid transparent;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.icon-btn.active {
+  border-color: var(--primary);
+  background: rgba(192, 193, 255, 0.15);
+}
+
+/* Focus behavior driven by the real dpad-nav library */
+.dpad-focusable {
+  outline: none !important;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.dpad-focusable:focus {
+  transform: scale(1.05);
+  z-index: 5;
+  position: relative;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 25px var(--focus-glow);
+}
+
+.list-focus:focus {
+  background: rgba(45, 52, 73, 0.6);
+}
+
+.list-focus {
+  position: relative;
+  border-left: 4px solid transparent;
+}
+
+.list-focus:focus {
+  border-left-color: var(--primary);
+}
+
+.glass-panel {
+  background: rgba(23, 31, 51, 0.75);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--outline-variant);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Debug HUD shown by the demo apps (not part of the library) */
+.debug-hud {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 60;
+  padding: 20px 24px;
+  border-radius: 12px;
+  min-width: 260px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.debug-hud.visible {
+  opacity: 1;
+}
+
+.debug-hud .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--debug-vector);
+  display: inline-block;
+  margin-right: 10px;
+  animation: pulse 1.6s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.debug-hud .row {
+  margin: 4px 0;
+  font-size: 14px;
+  color: var(--on-surface-variant);
+}
+
+.debug-hud .row b {
+  color: var(--primary);
+}
+
+/* d-pad debugger draws its own absolutely-positioned lines on <body>;
+   this just keeps them above everything else. */
+.dpad-debugger-line {
+  z-index: 999 !important;
+}

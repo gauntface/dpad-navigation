@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cinematic Highlights — dpad-nav demo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" />
+<link rel="stylesheet" href="css/theme.css" />
+<style>
+  .lists-shell {
+    display: flex;
+    gap: 56px;
+    align-items: flex-start;
+  }
+  .categories {
+    width: 260px;
+    flex: none;
+  }
+  .categories h4 {
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.15em;
+    font-size: 13px;
+    color: var(--on-surface-variant);
+    margin-bottom: 20px;
+  }
+  .categories .list-focus {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    background: transparent;
+    border: none;
+    color: var(--on-surface);
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .content-col {
+    flex: 1;
+    min-width: 0;
+  }
+  .content-col h2 {
+    font-size: 32px;
+    margin: 0 0 8px;
+  }
+  .content-col > p {
+    color: var(--on-surface-variant);
+    margin: 0 0 32px;
+  }
+  .media-row {
+    display: flex;
+    gap: 24px;
+    border-radius: 14px;
+    border: 1px solid var(--outline-variant);
+    background: var(--surface-container);
+    padding: 20px;
+    margin-bottom: 20px;
+    align-items: center;
+  }
+  .media-row .thumb {
+    width: 220px;
+    height: 130px;
+    border-radius: 10px;
+    flex: none;
+  }
+  .media-row .body {
+    flex: 1;
+    min-width: 0;
+  }
+  .media-row .body h3 {
+    margin: 0 0 8px;
+    font-size: 24px;
+  }
+  .media-row .body p {
+    margin: 0 0 12px;
+    color: var(--on-surface-variant);
+    font-size: 15px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    float: right;
+  }
+  .meta {
+    display: flex;
+    gap: 20px;
+    color: var(--secondary);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+  }
+  .axis-panel {
+    margin-top: 32px;
+    padding: 20px;
+    border-radius: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+  }
+  .axis-panel .row {
+    margin: 6px 0;
+    color: var(--on-surface-variant);
+  }
+  .axis-panel b {
+    color: var(--secondary);
+  }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="side-nav">
+    <div class="brand">
+      <span class="material-symbols-outlined icon">spatial_audio_off</span>
+      <span>Spatial Demo</span>
+    </div>
+    <nav>
+      <a class="nav-item" href="index.html" style="text-decoration:none; display:flex; align-items:center; gap:16px; padding:14px 24px;">
+        <span class="material-symbols-outlined icon">home</span><span>Home</span>
+      </a>
+      <a class="nav-item" href="grid.html" style="text-decoration:none; display:flex; align-items:center; gap:16px; padding:14px 24px;">
+        <span class="material-symbols-outlined icon">grid_view</span><span>Grid Demo</span>
+      </a>
+      <button class="dpad-focusable nav-item active" tabindex="1">
+        <span class="material-symbols-outlined icon">list</span><span>Lists</span>
+      </button>
+      <a class="nav-item" href="settings.html" style="text-decoration:none; display:flex; align-items:center; gap:16px; padding:14px 24px;">
+        <span class="material-symbols-outlined icon">settings</span><span>Settings</span>
+      </a>
+    </nav>
+    <div class="avatar"></div>
+  </aside>
+
+  <main class="main no-scrollbar">
+    <div class="lists-shell">
+      <div class="categories">
+        <h4>CATEGORIES</h4>
+        <button class="dpad-focusable list-focus" tabindex="10" data-node-id="cat-recommended" data-axis="vertical" data-dpad-initial-focus>
+          <span class="material-symbols-outlined">auto_awesome</span>Recommended
+        </button>
+        <button class="dpad-focusable list-focus" tabindex="11" data-node-id="cat-originals" data-axis="vertical">
+          <span class="material-symbols-outlined">movie</span>Cinema Originals
+        </button>
+        <button class="dpad-focusable list-focus" tabindex="12" data-node-id="cat-recent" data-axis="vertical">
+          <span class="material-symbols-outlined">history</span>Recently Viewed
+        </button>
+        <button class="dpad-focusable list-focus" tabindex="13" data-node-id="cat-favorites" data-axis="vertical">
+          <span class="material-symbols-outlined">favorite</span>My Favorites
+        </button>
+
+        <div class="axis-panel glass-panel">
+          <div class="row">FOCUS_NODE_ID: <b data-current-pos>cat-recommended</b></div>
+          <div class="row">AXIS_LOCK: <b id="axis-lock">VERTICAL</b></div>
+        </div>
+      </div>
+
+      <div class="content-col">
+        <h2>Cinematic Highlights</h2>
+        <p>Explore the latest high-fidelity spatial experiences curated for the 10-foot UI.</p>
+
+        <div class="dpad-focusable media-row" tabindex="20" data-node-id="row-neon-genesis" data-axis="horizontal">
+          <div class="thumb" style="background: linear-gradient(135deg, #1b2a4a, #0b1326);"></div>
+          <div class="body">
+            <span class="badge" style="background: var(--primary); color: var(--on-primary);">ULTRA HD</span>
+            <h3>Neon Genesis</h3>
+            <p>A deep dive into the architecture of the 24th century.</p>
+            <div class="meta"><span>★ 4.9</span><span>2h 15m</span></div>
+          </div>
+        </div>
+
+        <div class="dpad-focusable media-row" tabindex="21" data-node-id="row-ethereal-peaks" data-axis="horizontal">
+          <div class="thumb" style="background: linear-gradient(135deg, #3a1b4a, #0b1326);"></div>
+          <div class="body">
+            <span class="badge" style="background: var(--secondary); color: #2c0051;">HDR10+</span>
+            <h3>Ethereal Peaks</h3>
+            <p>Escape to the highest altitudes of the world.</p>
+            <div class="meta"><span>★ 4.8</span><span>1h 40m</span></div>
+          </div>
+        </div>
+
+        <div class="dpad-focusable media-row" tabindex="22" data-node-id="row-liquid-motion" data-axis="horizontal">
+          <div class="thumb" style="background: linear-gradient(135deg, #0f4a3a, #0b1326);"></div>
+          <div class="body">
+            <span class="badge" style="background: var(--tertiary); color: #00363e;">SPATIAL AUDIO</span>
+            <h3>Liquid Motion</h3>
+            <p>An abstract exploration of fluid dynamics.</p>
+            <div class="meta"><span>★ 5.0</span><span>45m</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="debug-hud glass-panel mono" id="debug-hud">
+  <div><span class="dot"></span><b>SPATIAL NODE ACTIVE</b></div>
+  <div class="row">ID: <b id="debug-hud-id">none</b></div>
+  <div class="row">TABINDEX: <b id="debug-hud-tabindex">0</b></div>
+  <div class="row">COORDS: <b id="debug-hud-coords">0, 0</b></div>
+</div>
+
+<script src="lib/dpad-controller.js"></script>
+<script src="lib/debug-controller.js"></script>
+<script src="lib/app.js"></script>
+<script>
+  document.querySelectorAll('.dpad-focusable[data-axis]').forEach((el) => {
+    el.addEventListener('focus', () => {
+      const lock = document.getElementById('axis-lock');
+      if (lock) lock.textContent = el.dataset.axis.toUpperCase();
+    });
+  });
+</script>
+</body>
+</html>

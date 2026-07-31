@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Settings — dpad-nav demo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" />
+<link rel="stylesheet" href="css/theme.css" />
+<style>
+  .settings-shell {
+    display: flex;
+    gap: 56px;
+    align-items: flex-start;
+  }
+  .settings-nav {
+    width: 240px;
+    flex: none;
+  }
+  .settings-nav h4 {
+    font-size: 18px;
+    color: var(--on-surface-variant);
+    margin: 0 0 20px;
+  }
+  .settings-nav .list-focus {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    background: transparent;
+    border: none;
+    color: var(--on-surface);
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+  .settings-nav .list-focus.active {
+    background: var(--surface-container-high);
+    border-left: 4px solid var(--primary);
+  }
+  .panels {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 760px;
+  }
+  .panel {
+    background: var(--surface-container);
+    border: 1px solid var(--outline-variant);
+    border-radius: 14px;
+    padding: 28px;
+  }
+  .panel h5 {
+    margin: 0 0 16px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .panel p {
+    color: var(--on-surface-variant);
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0 0 16px;
+  }
+  .panel-cols {
+    display: flex;
+    gap: 24px;
+  }
+  .panel-cols .panel {
+    flex: 1;
+  }
+  .field {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--surface-container-high);
+    border-radius: 10px;
+    padding: 16px 20px;
+  }
+  .field .hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--on-surface-variant);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+  .switch {
+    width: 46px;
+    height: 26px;
+    border-radius: 999px;
+    background: var(--surface-bright);
+    border: none;
+    position: relative;
+    cursor: pointer;
+  }
+  .switch::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    background: white;
+    top: 3px;
+    left: 3px;
+    transition: left 0.2s ease;
+  }
+  .switch.on {
+    background: var(--primary);
+  }
+  .switch.on::after {
+    left: 23px;
+  }
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+  }
+  .checkbox-row input {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary);
+  }
+  .reset-btn {
+    align-self: center;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 40px;
+    border-radius: 999px;
+    border: none;
+    background: var(--secondary);
+    color: #2c0051;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="side-nav">
+    <div class="brand">
+      <span class="material-symbols-outlined icon">spatial_audio_off</span>
+      <span>Spatial Demo</span>
+    </div>
+    <nav>
+      <a class="nav-item" href="index.html" style="text-decoration:none; display:flex; align-items:center; gap:16px; padding:14px 24px;">
+        <span class="material-symbols-outlined icon">home</span><span>Home</span>
+      </a>
+      <a class="nav-item" href="grid.html" style="text-decoration:none; display:flex; align-items:center; gap:16px; padding:14px 24px;">
+        <span class="material-symbols-outlined icon">grid_view</span><span>Grid Demo</span>
+      </a>
+      <a class="nav-item" href="lists.html" style="text-decoration:none; display:flex; align-items:center; gap:16px; padding:14px 24px;">
+        <span class="material-symbols-outlined icon">list</span><span>Lists</span>
+      </a>
+      <button class="dpad-focusable nav-item active" tabindex="1">
+        <span class="material-symbols-outlined icon">settings</span><span>Settings</span>
+      </button>
+    </nav>
+    <div class="avatar"></div>
+  </aside>
+
+  <main class="main no-scrollbar">
+    <div class="settings-shell">
+      <div class="settings-nav">
+        <h4>Settings</h4>
+        <button class="dpad-focusable list-focus active" tabindex="10" data-node-id="settings-display" data-dpad-initial-focus>
+          <span class="material-symbols-outlined">desktop_windows</span>Display
+        </button>
+        <button class="dpad-focusable list-focus" tabindex="11" data-node-id="settings-audio">
+          <span class="material-symbols-outlined">volume_up</span>Audio &amp; Voice
+        </button>
+        <button class="dpad-focusable list-focus" tabindex="12" data-node-id="settings-network">
+          <span class="material-symbols-outlined">wifi</span>Network
+        </button>
+        <button class="dpad-focusable list-focus" tabindex="13" data-node-id="settings-privacy">
+          <span class="material-symbols-outlined">shield</span>Privacy
+        </button>
+      </div>
+
+      <div class="panels">
+        <div class="panel">
+          <h5>Device Identity</h5>
+          <div class="field dpad-focusable" tabindex="20" data-node-id="device-name" style="border: 2px solid transparent;">
+            <span>Spatial-Node-01</span>
+            <span class="hint"><span class="material-symbols-outlined" style="font-size: 16px;">edit</span>Press OK to Edit</span>
+          </div>
+          <p style="margin-top: 16px; margin-bottom: 0;">The name displayed when broadcasting to other spatial nodes on your network.</p>
+        </div>
+
+        <div class="panel-cols">
+          <div class="panel">
+            <h5>Atmospheric Depth</h5>
+            <p>Enable background shaders and glassmorphism effects for a more immersive experience.</p>
+            <div class="field">
+              <span>Enable Shader Layer</span>
+              <button class="dpad-focusable switch on" tabindex="21" data-node-id="shader-layer" role="switch" aria-checked="true"></button>
+            </div>
+          </div>
+          <div class="panel">
+            <h5>Telemetry Nodes</h5>
+            <label class="checkbox-row dpad-focusable" tabindex="22" data-node-id="show-focus-vectors" data-dpad-debug-toggle="checkbox">
+              <input type="checkbox" tabindex="-1" />Show Focus Vectors
+            </label>
+            <label class="checkbox-row dpad-focusable" tabindex="23" data-node-id="z-space-debugging">
+              <input type="checkbox" tabindex="-1" />Z-Space Debugging
+            </label>
+          </div>
+        </div>
+
+        <button class="dpad-focusable reset-btn" tabindex="24" data-node-id="reset-focus-state" data-dpad-reset>
+          <span class="material-symbols-outlined">restart_alt</span>Reset Focus State
+        </button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="debug-hud glass-panel mono visible" id="debug-hud" style="bottom: 32px; right: 32px;">
+  <div><span class="dot"></span><b>SPATIAL DEBUGGER ACTIVE</b></div>
+  <div class="row">Focus ID: <b id="debug-hud-id">NONE</b></div>
+  <div class="row">Traversal: <b>D-PAD_LIBRARY</b></div>
+  <div class="row" style="display:none;">TABINDEX: <b id="debug-hud-tabindex">0</b></div>
+  <div class="row" style="display:none;">COORDS: <b id="debug-hud-coords">0, 0</b></div>
+</div>
+
+<script src="lib/dpad-controller.js"></script>
+<script src="lib/debug-controller.js"></script>
+<script src="lib/app.js"></script>
+<script>
+  // Cosmetic switch/checkbox toggling (not part of the library) — OK/Enter
+  // on a focused switch flips it, matching the "Press OK to toggle" pattern
+  // a real TV remote would use.
+  document.querySelectorAll('.switch').forEach((el) => {
+    el.addEventListener('click', () => {
+      const on = el.classList.toggle('on');
+      el.setAttribute('aria-checked', String(on));
+    });
+    el.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') el.click();
+    });
+  });
+  document.querySelectorAll('.checkbox-row').forEach((row) => {
+    const box = row.querySelector('input');
+    row.addEventListener('click', (e) => {
+      if (row.dataset.dpadDebugToggle) return; // handled by app.js
+      box.checked = !box.checked;
+    });
+    row.addEventListener('keyup', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && !row.dataset.dpadDebugToggle) {
+        box.checked = !box.checked;
+      }
+    });
+  });
+</script>
+</body>
+</html>

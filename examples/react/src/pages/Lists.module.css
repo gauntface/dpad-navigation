@@ -1,0 +1,103 @@
+.listsShell {
+  display: flex;
+  gap: 56px;
+  align-items: flex-start;
+}
+.categories {
+  width: 260px;
+  flex: none;
+}
+.categories h4 {
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.15em;
+  font-size: 13px;
+  color: var(--on-surface-variant);
+  margin-bottom: 20px;
+}
+.listFocus {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-radius: 10px;
+  font-size: 16px;
+  background: transparent;
+  border: none;
+  color: var(--on-surface);
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.contentCol {
+  flex: 1;
+  min-width: 0;
+}
+.contentCol h2 {
+  font-size: 32px;
+  margin: 0 0 8px;
+}
+.contentCol > p {
+  color: var(--on-surface-variant);
+  margin: 0 0 32px;
+}
+.mediaRow {
+  display: flex;
+  gap: 24px;
+  border-radius: 14px;
+  border: 1px solid var(--outline-variant);
+  background: var(--surface-container);
+  padding: 20px;
+  margin-bottom: 20px;
+  align-items: center;
+  box-sizing: border-box;
+}
+.thumb {
+  width: 220px;
+  height: 130px;
+  border-radius: 10px;
+  flex: none;
+}
+.body {
+  flex: 1;
+  min-width: 0;
+}
+.body h3 {
+  margin: 0 0 8px;
+  font-size: 24px;
+}
+.body p {
+  margin: 0 0 12px;
+  color: var(--on-surface-variant);
+  font-size: 15px;
+}
+.badge {
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  float: right;
+}
+.meta {
+  display: flex;
+  gap: 20px;
+  color: var(--secondary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+}
+.axisPanel {
+  margin-top: 32px;
+  padding: 20px;
+  border-radius: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+}
+.axisPanel .row {
+  margin: 6px 0;
+  color: var(--on-surface-variant);
+}
+.axisPanel b {
+  color: var(--secondary);
+}

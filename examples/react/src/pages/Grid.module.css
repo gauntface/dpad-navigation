@@ -1,0 +1,81 @@
+.pageHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 40px;
+}
+.pageHead h2 {
+  font-size: 40px;
+  margin: 0 0 8px;
+  color: var(--primary);
+}
+.pageHead p {
+  color: var(--on-surface-variant);
+  margin: 0;
+  max-width: 640px;
+}
+.debugToggleBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(90deg, #7b2ff7, #6f00be);
+  color: white;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+.labGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 24px;
+}
+.node {
+  border: 1px solid var(--outline-variant);
+  background: var(--surface-container);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: flex-end;
+  min-height: 160px;
+  font-size: 20px;
+  font-weight: 700;
+  box-sizing: border-box;
+}
+.feature {
+  grid-column: span 3;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  background: linear-gradient(135deg, #1b2a4a, #0b1326);
+}
+.feature p {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--on-surface-variant);
+  margin: 8px 0 0;
+}
+.wide {
+  grid-column: span 2;
+  background: linear-gradient(135deg, #101d3d, #0b1326);
+}
+.footer {
+  grid-column: span 4;
+  background: linear-gradient(135deg, #0e1830, #0b1326);
+}
+.labStatus {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--outline-variant);
+  display: flex;
+  gap: 48px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: var(--on-surface-variant);
+}
+.labStatus b {
+  color: var(--tertiary);
+}

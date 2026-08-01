@@ -29,12 +29,10 @@ for the app's lifetime and exposes:
 
 ### A note on keyboard activation
 
-`DpadController`'s Enter/Space handling calls `preventDefault()` and routes
-to `FocusableItem#onItemClickStateChange`, which is a no-op unless you
-supply a custom `FocusableItem`. That means a focused `<button>` does *not*
-activate on Enter the way native browser focus normally would — the library
-only manages *movement*, not *activation*. `useDpadLifecycle` restores the
-expected behavior generically: on Enter/Space keyup, if
-`document.activeElement` is `.dpad-focusable`, it gets `.click()`'d. Real
-apps using this library will want the same bridge (or a `FocusableItem`
-subclass wired to their own activation semantics).
+Enter/Space activating whatever's focused is handled by the library itself
+([#67](https://github.com/gauntface/dpad-navigation/pull/67)) — this demo
+used to bridge it manually in `useDpadLifecycle` because that behavior had
+regressed during the library's TypeScript rewrite, but that workaround is
+no longer needed (and would double-fire clicks if kept alongside the
+library's own fix). If you need different press/release semantics, subclass
+`FocusableItem` and override `onItemClickStateChange`.

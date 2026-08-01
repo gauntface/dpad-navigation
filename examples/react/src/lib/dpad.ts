@@ -65,20 +65,6 @@ export function useDpadLifecycle(route: string) {
   }, [route]);
 
   useEffect(() => {
-    // DpadController.onKeyDown preventDefaults Enter/Space and routes to
-    // FocusableItem#onItemClickStateChange, which is a no-op unless you
-    // supply your own FocusableItem subclass -- so out of the box, a
-    // focused .dpad-focusable element does NOT activate on Enter the way
-    // native browser focus normally would. Restore that expectation
-    // generically: whatever's focused, click it.
-    const onKeyUp = (event: KeyboardEvent) => {
-      if (event.key !== 'Enter' && event.key !== ' ') return;
-      const el = document.activeElement;
-      if (el instanceof HTMLElement && el.classList.contains('dpad-focusable')) {
-        el.click();
-      }
-    };
-
     const onFocus = (event: FocusEvent) => {
       const el = event.target as HTMLElement;
       if (!el.classList?.contains('dpad-focusable')) return;
@@ -102,10 +88,8 @@ export function useDpadLifecycle(route: string) {
       }
     };
 
-    document.addEventListener('keyup', onKeyUp);
     document.addEventListener('focus', onFocus, true);
     return () => {
-      document.removeEventListener('keyup', onKeyUp);
       document.removeEventListener('focus', onFocus, true);
     };
   }, []);

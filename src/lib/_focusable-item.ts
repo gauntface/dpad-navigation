@@ -111,7 +111,17 @@ export class FocusableItem {
   }
 
   onItemClickStateChange(isDown: boolean) {
-    // NOOP
+    // Mirrors native browser behavior for a focused, natively-interactive
+    // element: Enter/Space "clicks" it on release, not on press. This used
+    // to live only in a demo app's own FocusableItem subclass (see
+    // demos/demo1 in this repo's history, since removed) rather than the
+    // library itself, which meant every consumer had to rediscover and
+    // rebuild this bridge on their own. Restored here so it works by
+    // default; subclass FocusableItem and override this method if you need
+    // different press/release semantics.
+    if (!isDown) {
+      this.element.click();
+    }
   }
 }
 

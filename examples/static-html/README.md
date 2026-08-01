@@ -40,4 +40,5 @@ npm run build --prefix ../.. && cp ../../build/browser/{dpad-controller,debug-co
 `DpadController`/`DebugController` once per page, sets initial focus on the
 element marked `data-dpad-initial-focus`, and drives the debug HUD panel in
 the corner. Every actual focus-navigation behavior — which element is "up",
-"down", "left", "right" of the current one — comes from the library itself.
+"down", "left", "right" of the current one — comes from the library itself,
+as does Enter/Space activating whatever's currently focused (see [#67](https://github.com/gauntface/dpad-navigation/pull/67), which restored that after it regressed during the TypeScript rewrite).

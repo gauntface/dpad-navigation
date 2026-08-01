@@ -99,6 +99,9 @@ var __dpadBundleExports = (() => {
       };
     }
     onItemClickStateChange(isDown) {
+      if (!isDown) {
+        this.element.click();
+      }
     }
   };
 
@@ -318,6 +321,7 @@ var __dpadBundleExports = (() => {
     onKeyUp(event) {
       switch (event.keyCode) {
         case 13:
+        case 32:
           event.preventDefault();
           if (this.currentlyFocusedItem) {
             this.currentlyFocusedItem.onItemClickStateChange(false);

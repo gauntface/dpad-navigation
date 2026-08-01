@@ -51,10 +51,14 @@ body {
   flex-direction: column;
   padding: 32px 0;
   z-index: 50;
+  overflow: hidden;
   transition: width 0.25s ease;
 }
 
-.side-nav:hover {
+/* :focus-within expands the rail for keyboard/d-pad users tabbing into the
+   nav, same as :hover does for a mouse -- a d-pad remote has no hover. */
+.side-nav:hover,
+.side-nav:focus-within {
   width: 240px;
 }
 
@@ -65,8 +69,6 @@ body {
   padding: 0 24px;
   margin-bottom: 48px;
   color: var(--primary);
-  white-space: nowrap;
-  overflow: hidden;
 }
 
 .side-nav .brand .icon {
@@ -93,15 +95,29 @@ body {
   font: inherit;
   font-size: 16px;
   cursor: pointer;
-  white-space: nowrap;
-  overflow: hidden;
   text-align: left;
+  text-decoration: none;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .side-nav .nav-item .icon {
   flex: none;
   font-size: 22px;
+}
+
+/* Labels fade in/out rather than relying on the collapsed rail width to
+   clip the text -- clipped partial text (e.g. "Ho" for "Home") reads as a
+   layout bug, not a collapsed state. */
+.side-nav .label {
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.side-nav:hover .label,
+.side-nav:focus-within .label {
+  opacity: 1;
 }
 
 .side-nav .nav-item.active {
@@ -196,6 +212,20 @@ body {
   position: relative;
   border-color: var(--primary) !important;
   box-shadow: 0 0 25px var(--focus-glow);
+}
+
+/* Universal "something happened" feedback on activation (Enter/Space or a
+   real click) -- several focusable elements in this demo (Play Now, the
+   trending/library cards) are decorative and have no click handler of
+   their own, so without this a correctly-firing activation looks
+   identical to a broken one. */
+@keyframes dpad-activate-pulse {
+  from { box-shadow: 0 0 0 0 var(--focus-glow); }
+  to { box-shadow: 0 0 0 18px rgba(99, 102, 241, 0); }
+}
+
+.dpad-focusable.dpad-activated {
+  animation: dpad-activate-pulse 0.5s ease-out;
 }
 
 .list-focus:focus {

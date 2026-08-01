@@ -26,6 +26,18 @@
   const hudCoords = document.getElementById('debug-hud-coords');
 
   document.querySelectorAll('.dpad-focusable').forEach((el) => {
+    // Several elements here (Play Now, the trending/library cards) are
+    // decorative and have no click handler of their own -- without this,
+    // a correctly-firing Enter/Space activation (see #67) looks identical
+    // to a broken one, since nothing else visibly reacts.
+    el.addEventListener('click', () => {
+      el.classList.remove('dpad-activated');
+      // Force a reflow so re-adding the class restarts the animation if
+      // it's pressed again before the previous pulse finished.
+      void el.offsetWidth;
+      el.classList.add('dpad-activated');
+    });
+
     el.addEventListener('focus', () => {
       if (!hud) return;
       const rect = el.getBoundingClientRect();

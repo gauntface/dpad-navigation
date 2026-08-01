@@ -28,19 +28,6 @@ export function focusInitial() {
   }
 }
 
-// DpadController.onKeyDown preventDefaults Enter/Space and routes to
-// FocusableItem#onItemClickStateChange, which is a no-op unless you supply
-// your own FocusableItem subclass -- so out of the box, a focused <button>
-// does NOT activate on Enter the way native browser focus normally would.
-// Restore that expectation generically: whatever's focused, click it.
-document.addEventListener('keyup', (event) => {
-  if (event.key !== 'Enter' && event.key !== ' ') return;
-  const el = document.activeElement;
-  if (el instanceof HTMLElement && el.classList.contains('dpad-focusable')) {
-    el.click();
-  }
-});
-
 document.addEventListener(
   'focus',
   (event) => {

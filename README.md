@@ -1,8 +1,10 @@
 # D-Pad Navigation Library
 
-![alt text](http://i.imgur.com/1LcHG7j.png "D-Pad Navigation Library Demo Image")
+![The SpatialExplorer example app, with the "Play Now" button focused and glowing via the library's default focus styling](docs/screenshot.png "dpad-nav example app with a focused element")
 
 This library makes it quick and easy to support D-Pad Navigation in a web app.
+
+See it in action in [`examples/static-html`](examples/static-html) (no build step, just open `index.html`).
 
 ## Details
 

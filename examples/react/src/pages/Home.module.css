@@ -66,7 +66,15 @@
   display: flex;
   gap: 24px;
   overflow-x: auto;
-  padding: 8px 4px 16px;
+  /* The focused card scales up (transform: scale(1.05)) and grows a
+     25px glow (box-shadow); overflow-x: auto clips both at this
+     container's edge, so the first/last card looked clipped when
+     focused. Give the scroll box 40px of padding on every side as
+     breathing room, then pull it back with a matching negative
+     margin so the rail's resting-state alignment with its heading
+     above is unaffected. */
+  margin: 0 -40px;
+  padding: 24px 40px;
 }
 .card {
   flex: none;

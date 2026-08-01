@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Navigation Lab — dpad-nav demo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" />
+<link rel="stylesheet" href="css/theme.css" />
+<style>
+  .page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+  }
+  .page-head h2 {
+    font-size: 40px;
+    margin: 0 0 8px;
+    color: var(--primary);
+  }
+  .page-head p {
+    color: var(--on-surface-variant);
+    margin: 0;
+  }
+  .debug-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border-radius: 999px;
+    border: none;
+    background: linear-gradient(90deg, #7b2ff7, #6f00be);
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .lab-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px;
+  }
+  .node {
+    border: 1px solid var(--outline-variant);
+    background: var(--surface-container);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: flex-end;
+    min-height: 160px;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .node.feature {
+    grid-column: span 3;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    background: linear-gradient(135deg, #1b2a4a, #0b1326);
+  }
+  .node.feature p {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--on-surface-variant);
+    margin: 8px 0 0;
+  }
+  .node.wide {
+    grid-column: span 2;
+    background: linear-gradient(135deg, #101d3d, #0b1326);
+  }
+  .node.footer {
+    grid-column: span 4;
+    background: linear-gradient(135deg, #0e1830, #0b1326);
+  }
+  .lab-status {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid var(--outline-variant);
+    display: flex;
+    gap: 48px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--on-surface-variant);
+  }
+  .lab-status b {
+    color: var(--tertiary);
+  }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="side-nav">
+    <div class="brand">
+      <span class="material-symbols-outlined icon">spatial_audio_off</span>
+      <span class="label">Spatial Demo</span>
+    </div>
+    <nav>
+      <a class="dpad-focusable nav-item" href="index.html" tabindex="0" data-node-id="nav-home">
+        <span class="material-symbols-outlined icon">home</span><span class="label">Home</span>
+      </a>
+      <button class="dpad-focusable nav-item active" tabindex="0" data-node-id="nav-grid">
+        <span class="material-symbols-outlined icon">grid_view</span><span class="label">Grid Demo</span>
+      </button>
+      <a class="dpad-focusable nav-item" href="lists.html" tabindex="0" data-node-id="nav-lists">
+        <span class="material-symbols-outlined icon">list</span><span class="label">Lists</span>
+      </a>
+      <a class="dpad-focusable nav-item" href="settings.html" tabindex="0" data-node-id="nav-settings">
+        <span class="material-symbols-outlined icon">settings</span><span class="label">Settings</span>
+      </a>
+    </nav>
+    <div class="avatar"></div>
+  </aside>
+
+  <main class="main no-scrollbar">
+    <div class="page-head">
+      <div>
+        <h2>Navigation Lab</h2>
+        <p>Complex 5-column spatial traversal testing — irregular spans force the library's nearest-neighbor logic, not simple grid-index math.</p>
+      </div>
+      <button class="dpad-focusable debug-toggle-btn" tabindex="0" data-dpad-debug-toggle="button" data-node-id="debug-toggle">
+        <span class="material-symbols-outlined" style="font-size: 18px;">bug_report</span>
+        Debug Mode: <span data-dpad-debug-label>OFF</span>
+      </button>
+    </div>
+
+    <div class="lab-grid">
+      <div class="dpad-focusable node" tabindex="10" data-node-id="node-01" data-dpad-initial-focus>01</div>
+      <div class="dpad-focusable node wide" tabindex="11" data-node-id="node-02">02 — Wide Node</div>
+      <div class="dpad-focusable node" tabindex="12" data-node-id="node-03">03</div>
+      <div class="dpad-focusable node" tabindex="13" data-node-id="node-04">04</div>
+
+      <div class="dpad-focusable node" tabindex="20" data-node-id="node-05">05</div>
+      <div class="dpad-focusable node" tabindex="21" data-node-id="node-06">06</div>
+      <div class="dpad-focusable node" tabindex="22" data-node-id="node-07">07</div>
+      <div class="dpad-focusable node" tabindex="23" data-node-id="node-08">08</div>
+      <div class="dpad-focusable node" tabindex="24" data-node-id="node-09">09</div>
+
+      <div class="dpad-focusable node feature" tabindex="30" data-node-id="node-feature">
+        Feature Node — Path Test
+        <p>Spanning 3 columns forces unique up/down logic across the items above and below.</p>
+      </div>
+      <div class="dpad-focusable node" tabindex="31" data-node-id="node-10">10</div>
+      <div class="dpad-focusable node" tabindex="32" data-node-id="node-11">11</div>
+
+      <div class="dpad-focusable node" tabindex="40" data-node-id="node-12">12</div>
+      <div class="dpad-focusable node footer" tabindex="41" data-node-id="node-13">13 — Massive Footer Node</div>
+    </div>
+
+    <div class="lab-status">
+      <span>Focus Count: <b>14 Nodes</b></span>
+      <span>Grid Layout: <b>5-Column Responsive</b></span>
+      <span>Current Pos: <b data-current-pos>node-01</b></span>
+    </div>
+  </main>
+</div>
+
+<div class="debug-hud glass-panel mono" id="debug-hud">
+  <div><span class="dot"></span><b>SPATIAL NODE ACTIVE</b></div>
+  <div class="row">ID: <b id="debug-hud-id">none</b></div>
+  <div class="row">TABINDEX: <b id="debug-hud-tabindex">0</b></div>
+  <div class="row">COORDS: <b id="debug-hud-coords">0, 0</b></div>
+</div>
+
+<script src="lib/dpad-controller.js"></script>
+<script src="lib/debug-controller.js"></script>
+<script src="lib/app.js"></script>
+</body>
+</html>

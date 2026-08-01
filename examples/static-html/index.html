@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SpatialExplorer — dpad-nav demo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" />
+<link rel="stylesheet" href="css/theme.css" />
+<style>
+  .hero {
+    padding: 40px 0 80px;
+    max-width: 640px;
+  }
+  .hero .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.2em;
+    color: var(--secondary);
+    font-size: 14px;
+  }
+  .hero h2 {
+    font-size: 56px;
+    line-height: 1.1;
+    margin: 16px 0 24px;
+  }
+  .hero p {
+    color: var(--on-surface-variant);
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 20px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 32px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .btn-primary {
+    background: var(--primary);
+    color: var(--on-primary);
+  }
+  .btn-secondary {
+    background: rgba(45, 52, 73, 0.6);
+    color: var(--on-surface);
+    border-color: var(--outline-variant);
+  }
+  .shelf {
+    margin-bottom: 56px;
+  }
+  .shelf-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 20px;
+  }
+  .shelf-head h3 {
+    font-size: 24px;
+    margin: 0;
+  }
+  .shelf-head span {
+    color: var(--secondary);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+  }
+  .rail {
+    display: flex;
+    gap: 24px;
+    overflow-x: auto;
+    /* The focused card scales up (transform: scale(1.05)) and grows a
+       25px glow (box-shadow); overflow-x: auto clips both at this
+       container's edge, so the first/last card looked "clipped" when
+       focused. Give the scroll box 40px of padding on every side as
+       breathing room, then pull it back with a matching negative
+       margin so the rail's resting-state alignment with its heading
+       above is unaffected. */
+    margin: 0 -40px;
+    padding: 24px 40px;
+  }
+  .card {
+    flex: none;
+    border-radius: 14px;
+    border: 2px solid transparent;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    padding: 16px;
+    font-weight: 700;
+    color: white;
+  }
+  .card.wide {
+    width: 320px;
+    aspect-ratio: 16 / 9;
+  }
+  .card.tall {
+    width: 200px;
+    aspect-ratio: 2 / 3;
+  }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="side-nav">
+    <div class="brand">
+      <span class="material-symbols-outlined icon">spatial_audio_off</span>
+      <span class="label">Spatial Demo</span>
+    </div>
+    <nav>
+      <button class="dpad-focusable nav-item active" tabindex="0" data-node-id="nav-home">
+        <span class="material-symbols-outlined icon">home</span><span class="label">Home</span>
+      </button>
+      <a class="dpad-focusable nav-item" href="grid.html" tabindex="0" data-node-id="nav-grid">
+        <span class="material-symbols-outlined icon">grid_view</span><span class="label">Grid Demo</span>
+      </a>
+      <a class="dpad-focusable nav-item" href="lists.html" tabindex="0" data-node-id="nav-lists">
+        <span class="material-symbols-outlined icon">list</span><span class="label">Lists</span>
+      </a>
+      <a class="dpad-focusable nav-item" href="settings.html" tabindex="0" data-node-id="nav-settings">
+        <span class="material-symbols-outlined icon">settings</span><span class="label">Settings</span>
+      </a>
+    </nav>
+    <div class="avatar"></div>
+  </aside>
+
+  <main class="main no-scrollbar">
+    <header class="top-bar">
+      <h1>SpatialExplorer</h1>
+      <div class="top-bar-actions">
+        <div class="search-box">
+          <span class="material-symbols-outlined">search</span>
+          <span>Search...</span>
+        </div>
+        <button class="dpad-focusable icon-btn" tabindex="2" data-dpad-debug-toggle="icon" title="Toggle debug vectors">
+          <span class="material-symbols-outlined">bug_report</span>
+        </button>
+        <button class="dpad-focusable icon-btn" tabindex="3">
+          <span class="material-symbols-outlined">account_circle</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">ORIGINAL SERIES</div>
+      <h2>THE NEON<br />CHRONICLES</h2>
+      <p>In a world where memories are traded like currency, one rogue navigator must find the source code of reality before the system reboots.</p>
+      <div class="hero-actions">
+        <button class="dpad-focusable btn btn-primary" tabindex="4" data-dpad-initial-focus data-node-id="play-now">
+          <span class="material-symbols-outlined">play_arrow</span>Play Now
+        </button>
+        <button class="dpad-focusable btn btn-secondary" tabindex="5" data-node-id="more-info">
+          <span class="material-symbols-outlined">info</span>More Info
+        </button>
+      </div>
+    </section>
+
+    <section class="shelf">
+      <div class="shelf-head">
+        <h3>Trending Now</h3>
+        <span>View All</span>
+      </div>
+      <div class="rail no-scrollbar">
+        <div class="dpad-focusable card wide" tabindex="6" data-node-id="signal-lost" style="background: linear-gradient(135deg, #1b2a4a, #0b1326);">Signal Lost</div>
+        <div class="dpad-focusable card wide" tabindex="7" data-node-id="velocity-noir" style="background: linear-gradient(135deg, #3a1b4a, #0b1326);">Velocity Noir</div>
+        <div class="dpad-focusable card wide" tabindex="8" data-node-id="eden-404" style="background: linear-gradient(135deg, #0f4a3a, #0b1326);">Eden 404</div>
+        <div class="dpad-focusable card wide" tabindex="9" data-node-id="protocol-7" style="background: linear-gradient(135deg, #4a1b2e, #0b1326);">Protocol 7</div>
+      </div>
+    </section>
+
+    <section class="shelf">
+      <div class="shelf-head">
+        <h3>Your Library</h3>
+        <span>Sort by Recent</span>
+      </div>
+      <div class="rail no-scrollbar">
+        <div class="dpad-focusable card tall" tabindex="10" data-node-id="orbital" style="background: linear-gradient(160deg, #2a2450, #0b1326);">Orbital</div>
+        <div class="dpad-focusable card tall" tabindex="11" data-node-id="synthesis" style="background: linear-gradient(160deg, #4a3a1b, #0b1326);">Synthesis</div>
+        <div class="dpad-focusable card tall" tabindex="12" data-node-id="retroglow" style="background: linear-gradient(160deg, #4a1b45, #0b1326);">Retroglow</div>
+        <div class="dpad-focusable card tall" tabindex="13" data-node-id="monolith" style="background: linear-gradient(160deg, #33394a, #0b1326);">Monolith</div>
+        <div class="dpad-focusable card tall" tabindex="14" data-node-id="flux" style="background: linear-gradient(160deg, #1b3a4a, #0b1326);">Flux</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="debug-hud glass-panel mono" id="debug-hud">
+  <div><span class="dot"></span><b>SPATIAL NODE ACTIVE</b></div>
+  <div class="row">ID: <b id="debug-hud-id">none</b></div>
+  <div class="row">TABINDEX: <b id="debug-hud-tabindex">0</b></div>
+  <div class="row">COORDS: <b id="debug-hud-coords">0, 0</b></div>
+</div>
+
+<script src="lib/dpad-controller.js"></script>
+<script src="lib/debug-controller.js"></script>
+<script src="lib/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+.hero {
+  padding: 40px 0 80px;
+  max-width: 640px;
+}
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.2em;
+  color: var(--secondary);
+  font-size: 14px;
+}
+.hero h2 {
+  font-size: 56px;
+  line-height: 1.1;
+  margin: 16px 0 24px;
+}
+.hero p {
+  color: var(--on-surface-variant);
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+.heroActions {
+  display: flex;
+  gap: 20px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btnPrimary {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.btnSecondary {
+  background: rgba(45, 52, 73, 0.6);
+  color: var(--on-surface);
+  border-color: var(--outline-variant);
+}
+.shelf {
+  margin-bottom: 56px;
+}
+.shelfHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 20px;
+}
+.shelfHead h3 {
+  font-size: 24px;
+  margin: 0;
+}
+.shelfHead span {
+  color: var(--secondary);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+}
+.rail {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  /* The focused card scales up (transform: scale(1.05)) and grows a
+     25px glow (box-shadow); overflow-x: auto clips both at this
+     container's edge, so the first/last card looked clipped when
+     focused. Give the scroll box 40px of padding on every side as
+     breathing room, then pull it back with a matching negative
+     margin so the rail's resting-state alignment with its heading
+     above is unaffected. */
+  margin: 0 -40px;
+  padding: 24px 40px;
+}
+.card {
+  flex: none;
+  border-radius: 14px;
+  border: 2px solid transparent;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  padding: 16px;
+  font-weight: 700;
+  color: white;
+  box-sizing: border-box;
+}
+.wide {
+  width: 320px;
+  aspect-ratio: 16 / 9;
+}
+.tall {
+  width: 200px;
+  aspect-ratio: 2 / 3;
+}

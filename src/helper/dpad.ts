@@ -17,10 +17,20 @@ declare global {
   interface Window { dpad: DpadController; }
 }
 
-window.addEventListener('load', () => {
+const initializeDpad = () => {
 	window.dpad = window.dpad || new DpadController();
 	window.dpad.update();
-});
+};
+
+// Check if page has already loaded before registering the listener.
+// If the script loads after the page has finished loading (e.g., with async/defer
+// attributes or dynamic injection), the load event will never fire. In this case,
+// we initialize immediately. Otherwise, we wait for the load event.
+if (document.readyState === 'complete') {
+	initializeDpad();
+} else {
+	window.addEventListener('load', initializeDpad);
+}
 
 window.addEventListener('resize', () => {
 	if(!window.dpad) {

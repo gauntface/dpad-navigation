@@ -291,7 +291,7 @@ export class DpadController {
             break;
         case 13:
         case 32:
-            // Enter
+            // Enter / Space
             event.preventDefault();
             if(this.currentlyFocusedItem) {
                 this.currentlyFocusedItem.onItemClickStateChange(true);
@@ -303,7 +303,8 @@ export class DpadController {
   private onKeyUp(event: KeyboardEvent) {
     switch(event.keyCode) {
         case 13:
-            // Enter
+        case 32:
+            // Enter / Space
             event.preventDefault();
             if(this.currentlyFocusedItem) {
                 this.currentlyFocusedItem.onItemClickStateChange(false);

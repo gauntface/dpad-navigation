@@ -75,7 +75,8 @@ export class FocusableItem {
   };
 
   isFocusable(): boolean {
-    if(this.element.style.display === 'none' || this.element.style.visibility === 'hidden') {
+    const computedStyle = window.getComputedStyle(this.element);
+    if(computedStyle.display === 'none' || computedStyle.visibility === 'hidden') {
       return false;
     }
 
